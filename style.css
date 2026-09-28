@@ -1,0 +1,115 @@
+/* Steady Hand Software: shared styles */
+:root {
+  --paper: #f5f6f4;
+  --surface: #ffffff;
+  --ink: #161c1f;
+  --muted: #5a6470;
+  --rule: #dce0e4;
+  --prolene: #2f4ca3;      /* the violet-blue of polypropylene suture */
+  --prolene-soft: #e6eaf6;
+  --ok: #2c6e4f;
+  --ok-soft: #e3f0e8;
+  --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1317; --surface: #161b21; --ink: #e6e9ec; --muted: #9aa4af;
+    --rule: #272e36; --prolene: #9db0f2; --prolene-soft: #1c2440;
+    --ok: #7fc6a1; --ok-soft: #16281f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1317; --surface: #161b21; --ink: #e6e9ec; --muted: #9aa4af;
+  --rule: #272e36; --prolene: #9db0f2; --prolene-soft: #1c2440;
+  --ok: #7fc6a1; --ok-soft: #16281f; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.65 var(--body);
+  padding-inline: 20px;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding-block: 28px 64px; }
+a { color: var(--prolene); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible { outline: 2px solid var(--prolene); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+
+/* Masthead */
+.mast { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none;
+  font: 600 1rem/1 var(--display); letter-spacing: -0.01em; }
+.wordmark svg { width: 26px; height: 26px; flex: none; }
+.mast nav { display: flex; gap: 20px; font: 500 0.9rem/1 var(--display); }
+.mast nav a { color: var(--muted); text-decoration: none; }
+.mast nav a:hover, .mast nav a[aria-current="page"] { color: var(--ink); }
+
+/* Hero */
+.hero { padding-block: 72px 40px; }
+.hero h1 { font-size: clamp(2.4rem, 7vw, 4.25rem); font-weight: 600; letter-spacing: -0.035em; max-width: 14ch; }
+.hero p { font-size: 1.2rem; color: var(--muted); max-width: 38em; margin: 22px 0 0; }
+.suture { display: block; width: 100%; height: 28px; margin-top: 44px; color: var(--prolene); overflow: visible; }
+.suture .thread { stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: draw 1.8s cubic-bezier(.4,0,.2,1) .2s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .suture .thread { animation: none; stroke-dashoffset: 0; } }
+
+/* Principles */
+.principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-block: 8px 56px; }
+.principles div { border-top: 1px solid var(--rule); padding-top: 14px; }
+.principles h3 { font-size: 1rem; font-weight: 600; }
+.principles p { margin: 6px 0 0; color: var(--muted); font-size: 0.97rem; }
+
+/* App list */
+.section-label { font: 500 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted);
+  margin: 0 0 14px; }
+.apps { list-style: none; margin: 0 0 64px; padding: 0; border-top: 1px solid var(--ink); }
+.app { display: grid; grid-template-columns: 1fr auto; gap: 6px 24px; padding-block: 22px; border-bottom: 1px solid var(--rule); }
+.app h3 { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.015em; }
+.app .for { font: 500 0.72rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+  grid-column: 1; }
+.app p { margin: 4px 0 0; color: var(--muted); max-width: 40em; grid-column: 1; }
+.app .links { grid-column: 2; grid-row: 1 / span 3; align-self: center; display: flex; gap: 16px;
+  font: 500 0.92rem/1 var(--display); white-space: nowrap; }
+.status { display: inline-block; font: 500 0.72rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 6px 9px; border-radius: 999px; background: var(--prolene-soft); color: var(--prolene); }
+
+/* About */
+.about { display: grid; grid-template-columns: 200px 1fr; gap: 24px; border-top: 1px solid var(--rule); padding-top: 24px; }
+.about p { margin: 0 0 12px; max-width: 36em; }
+.contact { font-family: var(--mono); font-size: 0.95rem; user-select: all; }
+
+footer.site { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--rule); color: var(--muted);
+  font: 400 0.85rem/1.5 var(--display); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+footer.site a { color: var(--muted); }
+
+/* Document pages (privacy, support) */
+.doc-head { padding-block: 56px 28px; border-bottom: 1px solid var(--rule); margin-bottom: 32px; }
+.doc-head .app-name { font: 500 0.78rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--prolene); }
+.doc-head h1 { font-size: clamp(2rem, 5vw, 2.9rem); font-weight: 600; letter-spacing: -0.03em; margin-top: 12px; }
+.doc-head .tabs { display: flex; gap: 20px; margin-top: 22px; font: 500 0.92rem/1 var(--display); }
+.doc-head .tabs a { color: var(--muted); text-decoration: none; padding-bottom: 6px; border-bottom: 2px solid transparent; }
+.doc-head .tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--prolene); }
+.doc { max-width: 40em; }
+.doc h2 { font-size: 1.25rem; font-weight: 600; margin: 36px 0 10px; letter-spacing: -0.01em; }
+.doc h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 6px; }
+.doc p, .doc ul, .doc ol { margin: 0 0 14px; }
+.doc ul, .doc ol { padding-left: 1.3em; }
+.doc li { margin-bottom: 6px; }
+.doc .meta { font: 400 0.9rem/1.4 var(--mono); color: var(--muted); }
+.doc .faq { border-top: 1px solid var(--rule); padding-block: 16px 2px; }
+.doc .note { background: var(--ok-soft); color: var(--ink); border-left: 3px solid var(--ok); padding: 14px 18px; margin: 0 0 18px; }
+
+@media (max-width: 640px) {
+  .hero { padding-block: 48px 28px; }
+  .principles { grid-template-columns: 1fr; gap: 16px; }
+  .app { grid-template-columns: 1fr; }
+  .app .links { grid-column: 1; grid-row: auto; margin-top: 10px; }
+  .about { grid-template-columns: 1fr; gap: 8px; }
+}
