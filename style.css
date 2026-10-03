@@ -127,6 +127,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 .card.small h3 { font-size: 1.08rem; }
 .status { display: inline-block; font: 500 0.7rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase;
   padding: 6px 10px; border-radius: 999px; background: var(--prolene-soft); color: var(--prolene); }
+.status.beta { background: var(--ok-soft); color: var(--ok); }
 
 /* About */
 .about { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; border-top: 1px solid var(--rule); padding-top: 28px; }
