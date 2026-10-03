@@ -122,6 +122,8 @@ ul { list-style: none; margin: 0; padding: 0; }
 .chip { font: 500 0.85rem/1 var(--display); text-decoration: none; padding: 8px 12px; border-radius: 999px;
   background: var(--prolene-soft); color: var(--prolene); }
 .chip:hover { background: var(--prolene); color: var(--surface); }
+.chip.store { background: var(--prolene); color: var(--surface); }
+.chip.store:hover { background: var(--ink); color: var(--surface); }
 .card.small { flex-direction: row; align-items: flex-start; gap: 16px; box-shadow: none; background: transparent; }
 .card.small .icon { width: 52px; height: 52px; flex: none; }
 .card.small h3 { font-size: 1.08rem; }
