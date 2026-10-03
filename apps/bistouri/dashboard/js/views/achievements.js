@@ -3,39 +3,15 @@
 import { state } from '../api.js';
 import { h, today, addDays, academicYearStart, isoDate, fmtDate, relDays, fmtNum, plural, emptyState } from '../util.js';
 import { residents } from '../stats.js';
+import { ACHIEVEMENTS } from '../achievementCatalogue.js';
 
-// Keep in sync with the major achievements in ios/Bistouri/Achievements.swift
-// (and the titles in supabase/functions/notify-achievement).
-const MAJORS = [
-  { id: 'skin-to-skin', title: 'Skin to Skin', rule: 'First case as primary operator',
-    text: 'was primary operator for the first time. The System has opened a file on them.' },
-  { id: 'centurion', title: 'Centurion', rule: '100 cases',
-    text: 'has logged 100 cases. Their social life has been reclassified as a historical artifact.' },
-  { id: 'small-ship', title: 'Captain of a Very Small Ship', rule: '50 cases as primary operator',
-    text: 'has 50 cases as primary operator. They have started saying "we" about the hospital.' },
-  { id: 'attending-shaped', title: 'Attending-Shaped Object', rule: '100 cases as primary operator',
-    text: 'has 100 cases as primary operator. Attendings are advised to check their parking spots.' },
-  { id: 'club-250', title: 'The 250 Club', rule: '250 cases',
-    text: 'has joined the 250 Club. There is no clubhouse. There is a call room.' },
-  { id: 'furniture-no-longer', title: 'Furniture No Longer', rule: '500 cases',
-    text: 'has logged 500 cases. The OR has quietly accepted them as one of its own.' },
-  { id: 'thousand-cuts', title: 'Death by a Thousand Cuts', rule: '1,000 cases',
-    text: 'has logged 1,000 cases. The System requests a moment of stunned silence.' },
-  { id: 'full-house', title: 'Full House', rule: 'A case in every category',
-    text: 'has a case in every category. Their program director has been notified and is suspicious.' },
-  { id: 'requirements-detected', title: 'Requirements Detected', rule: 'Every program target met',
-    text: 'has met every program target. The System is cautiously optimistic, which it hates.' },
-  { id: 'iron-resident', title: 'Iron Resident', rule: 'Cases on 7 consecutive days',
-    text: 'has operated seven days in a row. Their partner has filed a missing-person report.' },
-  { id: 'assembly-line', title: 'Assembly Line', rule: '5 cases on the same date',
-    text: 'did five cases in one day. The OR schedule weeps.' },
-  { id: 'ten-weeks', title: 'Ten Weeks Underground', rule: 'Cases every week for 10 weeks',
-    text: 'has logged cases ten weeks running. They are no longer available for comment.' },
-];
+// Texts are generated from the app (scripts/build_achievement_catalogue.py).
+const MAJORS = ACHIEVEMENTS.filter((a) => a.tier === 'major').map((a) => ({ ...a, text: a.announcement }));
 const BY_ID = new Map(MAJORS.map((m) => [m.id, m]));
 
 let filter = '';
 let shown = 50;
+let catalogueTier = 'major';
 
 function tile(label, value, note, accent) {
   return h('div', { class: `tile${accent ? ' accent' : ''}` },
@@ -119,4 +95,35 @@ export function render(main, { rerender }) {
       })))));
 
   main.append(h('div', { class: 'grid-2' }, feed, table));
+  main.append(cataloguePanel(unlocks, rerender));
+}
+
+/** Every achievement with the notification residents see. */
+function cataloguePanel(unlocks, rerender) {
+  const list = ACHIEVEMENTS.filter((a) => a.tier === catalogueTier);
+  const tab = (tier, label) => h('button', {
+    class: `btn btn-sm${catalogueTier === tier ? ' btn-primary' : ' btn-ghost'}`, 'aria-pressed': String(catalogueTier === tier),
+    onclick: () => { catalogueTier = tier; rerender(); },
+  }, label);
+  return h('div', { class: 'panel' },
+    h('div', { class: 'panel-head' },
+      h('div', null, h('h2', null, 'Every achievement'),
+        h('div', { class: 'hint' }, catalogueTier === 'major'
+          ? 'Announced to the program when unlocked. The resident sees the notification; everyone sees the announcement.'
+          : 'Stay on the resident’s phone; never shown here when unlocked. Hidden ones show as “???” until earned.')),
+      h('div', { class: 'toolbar' },
+        tab('major', `Major (${ACHIEVEMENTS.filter((a) => a.tier === 'major').length})`),
+        tab('minor', `Minor (${ACHIEVEMENTS.filter((a) => a.tier === 'minor').length})`))),
+    h('div', { class: 'catalogue' }, list.map((a) => {
+      const n = unlocks.filter((u) => u.achievement_id === a.id).length;
+      return h('article', { class: 'ach' },
+        h('div', { class: 'ach-head' },
+          h('h3', null, a.title),
+          a.hidden ? h('span', { class: 'badge' }, 'hidden') : null,
+          a.tier === 'major' && n ? h('span', { class: 'badge brand' }, plural(n, 'resident')) : null),
+        a.rule ? h('div', { class: 'ach-rule' }, a.rule) : null,
+        h('p', { class: 'ach-message' }, a.message),
+        h('p', { class: 'ach-reward' }, h('strong', null, 'Reward: '), a.reward),
+        a.announcement ? h('p', { class: 'ach-announce' }, h('span', { class: 'system' }, 'Announcement'), h('em', null, 'Name'), ' ', a.announcement) : null);
+    })));
 }

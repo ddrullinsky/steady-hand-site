@@ -14,6 +14,7 @@ import { h, icon, toast, dialog, errorText, byOrder, plural } from './util.js';
  *   defaults     fields added to every insert (e.g. { program_id, category_id })
  *   filter       search text; reorder is disabled while filtering
  *   deleteNote(row)  extra warning text for the delete confirmation
+ *   rowExtra(row)    optional element shown next to the usage badge (e.g. a "move to" select)
  *   onChanged()  async; reloads data and re-renders
  *   addPlaceholder
  */
@@ -46,6 +47,7 @@ function itemRow(row, ordered, opts, filtering) {
     h('span', { class: 'pos' }, idx + 1),
     extras.length ? h('div', { style: { display: 'flex', gap: '6px' } }, nameIn, extras) : nameIn,
     h('div', { class: 'meta' },
+      opts.rowExtra ? opts.rowExtra(row) : null,
       used !== null ? h('span', { class: `badge outline plain`, title: 'Logged cases that use this' }, used ? plural(used, 'case') : 'unused') : null,
       row.active === false ? h('span', { class: 'badge warn' }, 'inactive') : null),
     rowActions(row, ordered, opts, filtering),

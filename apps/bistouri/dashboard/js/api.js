@@ -13,6 +13,7 @@ export const CONFIG_TABLES = {
   categories: 'procedure_categories',
   procedures: 'procedures',
   tasks: 'procedural_tasks',
+  taskSections: 'task_sections',
   approaches: 'approaches',
   roles: 'case_roles',
   attendings: 'attendings',

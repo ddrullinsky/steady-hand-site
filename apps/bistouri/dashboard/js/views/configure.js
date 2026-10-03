@@ -73,7 +73,7 @@ export function render(main, { args, rerender }) {
   main.append(panel);
   ({
     procedures: () => renderProcedures(panel, usage),
-    tasks: () => renderSimple(panel, usage, { key: 'tasks', noun: 'task', title: 'Procedural tasks', hint: 'Steps a resident can tick for a case, with a count (e.g. distal anastomosis ×3).', targetKey: 'task_id' }),
+    tasks: () => renderTasks(panel, usage),
     approaches: () => renderSimple(panel, usage, { key: 'approaches', noun: 'approach', title: 'Approaches', hint: 'How the case was done (open, minimally invasive, robotic…). One per case.' }),
     roles: () => renderSimple(panel, usage, { key: 'roles', noun: 'role', title: 'Case roles', hint: 'The resident’s role, picked with one tap per case. Put the most responsible role first: the dashboard reports it as the headline role.', targetKey: 'role_id' }),
     attendings: () => renderSimple(panel, usage, { key: 'attendings', noun: 'attending', title: 'Attendings', hint: 'Staff surgeons residents pick from. Residents can still type a name that is not on the list.' }),
@@ -158,6 +158,127 @@ function offListAttendings(rows) {
           await changed();
         },
       }, icon('plus'), 'Add to list')))));
+}
+
+// ---------------------------------------------------------------------------
+// Procedural tasks, grouped in sections (tree)
+// ---------------------------------------------------------------------------
+function renderTasks(panel, usage) {
+  const sections = [...state.config.taskSections].sort(byOrder);
+  const tasks = state.config.tasks;
+  const q = ui.q.trim().toLowerCase();
+  const known = new Set(sections.map((s) => s.id));
+  const tasksOf = (sid) => tasks.filter((t) => (sid ? t.section_id === sid : !known.has(t.section_id)));
+  const catName = (id) => state.config.byId.categories.get(id)?.name;
+
+  panel.append(h('div', { class: 'editor-toolbar' },
+    h('div', null, h('h2', { style: { fontSize: '16px' } }, 'Procedural tasks'),
+      h('div', { class: 'hint' }, 'Steps a resident ticks for a case, with a count (e.g. distal anastomosis ×3). ',
+        'Sections group them in operative order; a section linked to procedure categories opens by itself in the app for those procedures.')),
+    h('div', { class: 'toolbar' },
+      searchBox('Search tasks'),
+      h('button', { class: 'btn btn-ghost btn-sm', onclick: () => { sections.forEach((s) => ui.open.add(s.id)); ui.open.add('none'); rerenderView(); } }, 'Expand all'),
+      h('button', { class: 'btn btn-ghost btn-sm', onclick: () => { ui.open.clear(); rerenderView(); } }, 'Collapse all'))));
+
+  // Move a task to another section.
+  const moveSelect = (t) => h('select', {
+    class: 'small-select', 'aria-label': `Section of ${t.name}`, title: 'Move to section',
+    onchange: async (e) => {
+      const { error } = await updateRow('procedural_tasks', t.id, { section_id: e.target.value || null });
+      if (error) return toast(errorText(error), 'error');
+      toast('Moved');
+      await changed();
+    },
+  }, sections.map((s) => h('option', { value: s.id, selected: s.id === t.section_id }, s.name)),
+  h('option', { value: '', selected: !known.has(t.section_id) }, 'No section'));
+
+  const taskEditor = (sid, list) => listEditor({
+    table: 'procedural_tasks', rows: list, noun: 'task', filter: ui.q,
+    usage: (t) => usage.tasks.get(t.id) || 0,
+    defaults: { program_id: state.program.id, section_id: sid },
+    addKey: `tasks:${sid || 'none'}`, onChanged: changed,
+    rowExtra: sections.length ? moveSelect : null,
+    deleteNote: (t) => { const n = targetsUsing('task_id', t.id); return n ? `${plural(n, 'target')} that use${n === 1 ? 's' : ''} it will also be deleted.` : null; },
+  });
+
+  const secOpts = { table: 'task_sections', noun: 'section', onChanged: changed,
+    deleteNote: (s) => { const n = tasksOf(s.id).length; return n ? `Its ${plural(n, 'task')} move to “No section”; nothing is deleted from them.` : null; } };
+
+  const editCategories = async (s) => {
+    const chosen = new Set(s.category_ids || []);
+    const boxes = [...state.config.categories].sort(byOrder).filter((c) => c.active).map((c) =>
+      h('label', { class: 'check', style: { display: 'flex', margin: '4px 0' } },
+        h('input', { type: 'checkbox', checked: chosen.has(c.id), onchange: (e) => (e.target.checked ? chosen.add(c.id) : chosen.delete(c.id)) }),
+        ' ', c.name));
+    const ok = await dialog({
+      title: `When should “${s.name}” open by itself?`,
+      body: [h('p', null, 'In the app, this section opens automatically when the case has a procedure in one of these categories. Leave all unticked for sections residents open themselves (e.g. prep, closing).'),
+        h('div', null, boxes)],
+      buttons: [{ label: 'Cancel', value: false, kind: 'ghost' }, { label: 'Save', value: true, kind: 'primary' }],
+    });
+    if (!ok) return;
+    const { error } = await updateRow('task_sections', s.id, { category_ids: [...chosen] });
+    if (error) return toast(errorText(error), 'error');
+    toast('Saved');
+    await changed();
+  };
+
+  let shown = 0;
+  const groups = sections.map((s) => ({ s, list: tasksOf(s.id) }));
+  const loose = tasksOf(null);
+  if (loose.length || !sections.length) groups.push({ s: null, list: loose });
+  for (const { s, list } of groups) {
+    if (!s && !sections.length) {
+      // No sections yet: a plain list, as before.
+      panel.append(taskEditor(null, list));
+      shown++;
+      continue;
+    }
+    const matches = q ? list.filter((t) => t.name.toLowerCase().includes(q)) : list;
+    if (q && !matches.length && !(s && s.name.toLowerCase().includes(q))) continue;
+    shown++;
+    const key = s ? s.id : 'none';
+    const open = q ? true : ui.open.has(key);
+    const head = h('div', { class: 'cat-head' });
+    const box = h('div', { class: `cat${s && !s.active ? ' inactive' : ''}` }, head);
+    const cats = s ? (s.category_ids || []).map(catName).filter(Boolean) : [];
+    head.append(
+      h('button', {
+        class: 'btn btn-ghost btn-icon', 'aria-expanded': String(open), 'aria-label': `${open ? 'Collapse' : 'Expand'} ${s ? s.name : 'tasks without a section'}`,
+        onclick: () => { open ? ui.open.delete(key) : ui.open.add(key); rerenderView(); },
+      }, h('span', { class: 'chev', style: { display: 'inline-flex', transform: open ? 'rotate(90deg)' : 'none' } }, icon('chevron'))),
+      h('span', { class: 'pos muted small', style: { textAlign: 'right' } }, s ? sections.indexOf(s) + 1 : ''),
+      s ? inlineInput(s, 'name', secOpts, box, 'Section name') : h('span', { class: 'muted', style: { padding: '5px 8px' } }, 'No section'),
+      h('div', { class: 'meta', style: { display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' } },
+        h('span', { class: 'badge outline plain' }, plural(list.filter((t) => t.active).length, 'task')),
+        s ? h('button', {
+          class: 'btn btn-ghost btn-sm', title: 'Procedure categories that open this section in the app', onclick: () => editCategories(s),
+        }, cats.length ? `Opens for: ${cats.join(', ')}` : 'Opens manually') : null,
+        s && !s.active ? h('span', { class: 'badge warn' }, 'inactive') : null),
+      s ? rowActions(s, sections, secOpts, !!q) : h('span'),
+    );
+    if (open) box.append(h('div', { class: 'cat-body' }, taskEditor(s ? s.id : null, list)));
+    panel.append(box);
+  }
+  if (q && !shown) panel.append(h('p', { class: 'muted' }, `Nothing matches “${ui.q}”.`));
+
+  // add section
+  const input = h('input', { type: 'text', placeholder: 'New section (e.g. Tricuspid valve)', 'aria-label': 'New section name' });
+  panel.append(h('form', {
+    class: 'add-row', style: { marginTop: '14px' },
+    onsubmit: async (e) => {
+      e.preventDefault();
+      const name = input.value.trim();
+      if (!name) return;
+      const { data, error } = await insertRow('task_sections', {
+        program_id: state.program.id, name, sort_order: sections.reduce((m, x) => Math.max(m, x.sort_order || 0), 0) + 1,
+      });
+      if (error) return toast(error.code === '23505' ? `“${name}” already exists.` : errorText(error), 'error');
+      ui.open.add(data.id);
+      toast(`Added section “${name}”. Add tasks, or move existing ones into it.`);
+      await changed({ focusAdd: `tasks:${data.id}` });
+    },
+  }, input, h('button', { class: 'btn', type: 'submit' }, icon('plus'), 'Add section')));
 }
 
 // ---------------------------------------------------------------------------
