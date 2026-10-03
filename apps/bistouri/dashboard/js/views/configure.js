@@ -123,6 +123,41 @@ function renderSimple(panel, usage, cfg) {
     panel.append(h('p', { class: 'hint', style: { marginTop: '10px' } },
       'Tip: until you add attendings, residents type the name for each case. Adding the list makes logging faster and keeps names consistent.'));
   }
+  if (cfg.key === 'attendings') panel.append(offListAttendings(rows));
+}
+
+/** Names residents typed under "Other…" that are not on the list, with one-click add. */
+function offListAttendings(rows) {
+  const listed = new Set(rows.map((r) => r.name.trim().toLowerCase()));
+  const typed = new Map(); // lowercased name -> { name, n }
+  for (const c of state.cases) {
+    const name = !c.attending_id && c.attending_name?.trim();
+    if (!name || listed.has(name.toLowerCase())) continue;
+    const key = name.toLowerCase();
+    const entry = typed.get(key) || { name, n: 0 };
+    entry.n += 1;
+    typed.set(key, entry);
+  }
+  const names = [...typed.values()].sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+  if (!names.length) return null;
+  const nextOrder = rows.reduce((m, r) => Math.max(m, r.sort_order || 0), 0);
+  return h('div', { class: 'offlist' },
+    h('h3', null, 'Typed by residents, not on your list'),
+    h('p', { class: 'hint' }, 'Names residents entered under “Other…”. Add one to make it a choice in the app. Cases already logged under that name count toward it.'),
+    h('ul', { class: 'items' }, names.map((x, i) => h('li', { class: 'item' },
+      h('span', { class: 'item-name' }, x.name),
+      h('span', { class: 'muted small' }, plural(x.n, 'case')),
+      h('button', {
+        class: 'btn btn-sm',
+        onclick: async (e) => {
+          e.currentTarget.disabled = true;
+          const { error } = await insertRow(CONFIG_TABLES.attendings,
+            { program_id: state.program.id, name: x.name, sort_order: nextOrder + i + 1 });
+          if (error) { e.currentTarget.disabled = false; return toast(errorText(error), 'error'); }
+          toast(`Added ${x.name}`);
+          await changed();
+        },
+      }, icon('plus'), 'Add to list')))));
 }
 
 // ---------------------------------------------------------------------------

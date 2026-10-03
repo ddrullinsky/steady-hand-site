@@ -461,3 +461,11 @@ dialog.modal h2 { font-size: 18px; margin-bottom: 10px; }
 .feed-title .system { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-right: 8px; }
 .feed-text { color: var(--ink-2); font-size: 14px; margin-top: 2px; }
 .feed-meta { color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }
+
+/* ---------- Off-list attendings ---------- */
+.offlist { margin-top: 22px; }
+.offlist h3 { font-size: 14px; }
+.offlist .hint { margin: 2px 0 10px; }
+.offlist .item { display: flex; flex-wrap: wrap; align-items: center; padding: 6px 8px 6px 12px; gap: 4px 12px; }
+.offlist .item-name { font-size: 14px; flex: 1 1 180px; min-width: 0; overflow-wrap: anywhere; }
+.offlist .btn .icon { margin-right: 4px; }
