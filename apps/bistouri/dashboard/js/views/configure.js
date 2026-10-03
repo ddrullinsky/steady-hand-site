@@ -281,6 +281,42 @@ function renderTasks(panel, usage) {
   }, input, h('button', { class: 'btn', type: 'submit' }, icon('plus'), 'Add section')));
 }
 
+/** Button + dialog to pick the tasks the app suggests first for a procedure. */
+function typicalTasksButton(proc) {
+  const n = (proc.typical_task_ids || []).length;
+  return h('button', {
+    class: 'btn btn-ghost btn-sm', title: 'Tasks the app suggests first when residents pick this procedure',
+    onclick: () => editTypicalTasks(proc),
+  }, n ? `Suggests ${plural(n, 'task')}` : 'No suggested tasks');
+}
+
+async function editTypicalTasks(proc) {
+  const chosen = new Set(proc.typical_task_ids || []);
+  const sections = [...state.config.taskSections].sort(byOrder);
+  const known = new Set(sections.map((s) => s.id));
+  const groups = sections.map((s) => ({ name: s.name, tasks: state.config.tasks.filter((t) => t.section_id === s.id) }));
+  groups.push({ name: sections.length ? 'No section' : 'Tasks', tasks: state.config.tasks.filter((t) => !known.has(t.section_id)) });
+  const body = groups.filter((g) => g.tasks.some((t) => t.active)).map((g) => h('fieldset', { class: 'task-group' },
+    h('legend', null, g.name),
+    [...g.tasks].sort(byOrder).filter((t) => t.active).map((t) => h('label', { class: 'check', style: { display: 'flex', margin: '3px 0' } },
+      h('input', { type: 'checkbox', checked: chosen.has(t.id), onchange: (e) => (e.target.checked ? chosen.add(t.id) : chosen.delete(t.id)) }),
+      ' ', t.name))));
+  const ok = await dialog({
+    title: `Suggested tasks for “${proc.name}”`,
+    body: [h('p', null, 'When a resident picks this procedure, these tasks are listed first in the app, ready to tick. ',
+      'Nothing is ticked automatically. The app also adds tasks the resident usually logs with it.'),
+      h('div', { class: 'task-groups' }, body)],
+    buttons: [{ label: 'Cancel', value: false, kind: 'ghost' }, { label: 'Save', value: true, kind: 'primary' }],
+  });
+  if (!ok) return;
+  const order = new Map(state.config.tasks.map((t) => [t.id, t.sort_order || 0]));
+  const ids = [...chosen].sort((a, b) => (order.get(a) || 0) - (order.get(b) || 0));
+  const { error } = await updateRow('procedures', proc.id, { typical_task_ids: ids });
+  if (error) return toast(errorText(error), 'error');
+  toast('Saved');
+  await changed();
+}
+
 // ---------------------------------------------------------------------------
 // Categories & procedures (tree)
 // ---------------------------------------------------------------------------
@@ -335,6 +371,7 @@ function renderProcedures(panel, usage) {
           usage: (p) => usage.procedures.get(p.id) || 0,
           defaults: { program_id: state.program.id, category_id: cat.id },
           addKey: `procedures:${cat.id}`, onChanged: changed,
+          rowExtra: typicalTasksButton,
           deleteNote: (p) => { const n = targetsUsing('procedure_id', p.id); return n ? `${plural(n, 'target')} using it will also be deleted.` : null; },
         })));
     }
