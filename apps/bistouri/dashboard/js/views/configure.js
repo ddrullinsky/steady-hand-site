@@ -13,6 +13,7 @@ const TABS = [
   { id: 'attendings', label: 'Attendings', count: () => state.config.attendings.filter((r) => r.active).length },
   { id: 'fields', label: 'Extra fields', count: () => state.config.fields.filter((r) => r.active).length },
   { id: 'targets', label: 'Targets', count: () => state.config.targets.filter((r) => r.active).length },
+  { id: 'epas', label: 'EPAs', count: () => state.config.epas.filter((r) => r.active).length },
 ];
 
 const ui = { q: '', open: new Set() };
@@ -79,6 +80,7 @@ export function render(main, { args, rerender }) {
     attendings: () => renderSimple(panel, usage, { key: 'attendings', noun: 'attending', title: 'Attendings', hint: 'Staff surgeons residents pick from. Residents can still type a name that is not on the list.' }),
     fields: () => renderFields(panel, usage),
     targets: () => renderTargets(panel),
+    epas: () => renderEPAs(panel),
   })[tab]();
 }
 
@@ -626,4 +628,115 @@ function renderTargets(panel) {
     })))));
   panel.append(h('p', { class: 'hint', style: { marginTop: '10px' } },
     `Kinds: ${['category', 'procedure', 'task'].map((k) => `${fmtNum(rows.filter((t) => targetKind(t) === k).length)} ${k}`).join(', ')}. Task targets add up the counts residents enter (e.g. ×3 distal anastomoses).`));
+}
+
+// ---------------------------------------------------------------------------
+// EPAs: which cases the app suggests each one for
+// ---------------------------------------------------------------------------
+const STAGES = { 1: 'Transition to Discipline', 2: 'Foundations', 3: 'Core', 4: 'Transition to Practice' };
+
+/** One line on when the app suggests an EPA, or null when it never does. */
+function epaRule(epa) {
+  const cfg = state.config;
+  const names = (ids, map) => ids.map((id) => map.get(id)?.name).filter(Boolean);
+  const tasks = names(epa.task_ids || [], cfg.byId.tasks);
+  const procs = names(epa.procedure_ids || [], cfg.byId.procedures);
+  const roles = names(epa.role_ids || [], cfg.byId.roles);
+  const list = (xs) => (xs.length > 3 ? `${xs.slice(0, 3).join(', ')} +${xs.length - 3}` : xs.join(', '));
+  const parts = [];
+  if (tasks.length) parts.push(`task: ${list(tasks)}`);
+  if (procs.length) parts.push(`${list(procs)}${roles.length ? ` as ${roles.join(' or ')}` : ''}`);
+  else if (roles.length) parts.push(`any case as ${roles.join(' or ')}`);
+  return parts.length ? parts.join('; or ') : null;
+}
+
+function renderEPAs(panel) {
+  const rows = [...state.config.epas].sort(byOrder);
+  const q = ui.q.trim().toLowerCase();
+  const shown = q ? rows.filter((e) => `${e.code} ${e.title} ${e.description || ''}`.toLowerCase().includes(q)) : rows;
+
+  panel.append(h('div', { class: 'editor-toolbar' },
+    h('div', null, h('h2', { style: { fontSize: '16px' } }, 'EPAs'),
+      h('div', { class: 'hint' }, 'After a case, the app lists the EPAs it could count toward, so the resident can ask the attending to assess them. ',
+        'An EPA is suggested when the resident ticks one of its tasks (any role), or logs one of its procedures in one of its roles. ',
+        'The app shows the EPAs of the resident’s stage, judged from their PGY year.')),
+    h('div', { class: 'toolbar' }, searchBox('Search EPAs'))));
+
+  if (!rows.length) {
+    panel.append(h('p', { class: 'muted' }, 'No EPAs for this program yet.'));
+    return;
+  }
+  const body = h('tbody');
+  for (const stage of [1, 2, 3, 4]) {
+    const list = shown.filter((e) => e.stage === stage);
+    if (!list.length) continue;
+    body.append(h('tr', null, h('th', { colspan: 4, scope: 'colgroup', style: { paddingTop: '14px' } }, STAGES[stage])));
+    for (const e of list) {
+      const rule = epaRule(e);
+      body.append(h('tr', { class: e.active ? '' : 'inactive' },
+        h('td', { style: { fontVariantNumeric: 'tabular-nums', fontWeight: 600, whiteSpace: 'nowrap' } }, e.code),
+        h('td', null, h('div', { class: 'cell-name' }, e.title),
+          h('div', { class: 'cell-sub' }, [e.description, e.requirement].filter(Boolean).join(' · ')),
+          e.active ? null : h('span', { class: 'badge warn' }, 'hidden')),
+        h('td', { class: rule ? 'small' : 'small muted' }, rule || 'Not suggested from cases'),
+        h('td', { class: 'actions-cell' }, h('button', { class: 'btn btn-ghost btn-sm', onclick: () => editEPA(e) }, 'Edit'))));
+    }
+  }
+  panel.append(h('div', { class: 'table-wrap' }, h('table', { class: 'table' },
+    h('thead', null, h('tr', null, h('th', null, 'EPA'), h('th', null, 'Name'), h('th', null, 'Suggested when'), h('th', null, ''))),
+    body)));
+  if (q && !shown.length) panel.append(h('p', { class: 'muted' }, `Nothing matches “${ui.q}”.`));
+}
+
+async function editEPA(epa) {
+  const cfg = state.config;
+  const chosen = { task_ids: new Set(epa.task_ids || []), procedure_ids: new Set(epa.procedure_ids || []), role_ids: new Set(epa.role_ids || []) };
+  const box = (key, item) => h('label', { class: 'check', style: { display: 'flex', margin: '3px 0' } },
+    h('input', { type: 'checkbox', checked: chosen[key].has(item.id), onchange: (e) => (e.target.checked ? chosen[key].add(item.id) : chosen[key].delete(item.id)) }),
+    ' ', item.name);
+  const active = (list) => [...list].sort(byOrder).filter((x) => x.active);
+
+  const sections = active(cfg.taskSections);
+  const known = new Set(sections.map((s) => s.id));
+  const taskGroups = sections.map((s) => ({ name: s.name, items: active(cfg.tasks).filter((t) => t.section_id === s.id) }));
+  taskGroups.push({ name: sections.length ? 'No section' : 'Tasks', items: active(cfg.tasks).filter((t) => !known.has(t.section_id)) });
+  const procGroups = active(cfg.categories).map((c) => ({ name: c.name, items: active(cfg.procedures).filter((p) => p.category_id === c.id) }));
+
+  const groupList = (key, groups) => groups.filter((g) => g.items.length).map((g) => {
+    const picked = g.items.filter((x) => chosen[key].has(x.id)).length;
+    return h('details', { class: 'task-group', open: picked > 0 },
+      h('summary', { style: { cursor: 'pointer', fontWeight: 600, fontSize: '13px', color: 'var(--ink-2)' } }, g.name, picked ? ` (${picked})` : ''),
+      h('div', { style: { paddingLeft: '14px' } }, g.items.map((x) => box(key, x))));
+  });
+  const visible = h('input', { type: 'checkbox', checked: epa.active });
+
+  const ok = await dialog({
+    title: `${epa.code} ${epa.title}`,
+    body: [
+      epa.description ? h('p', { class: 'muted small' }, epa.description) : null,
+      h('div', { class: 'task-groups' },
+        h('h3', { style: { fontSize: '14px', margin: '4px 0' } }, 'Tasks'),
+        h('p', { class: 'hint' }, 'Suggested when the resident ticks any of these, whatever their role.'),
+        groupList('task_ids', taskGroups),
+        h('h3', { style: { fontSize: '14px', margin: '14px 0 4px' } }, 'Procedures'),
+        h('p', { class: 'hint' }, 'Suggested when the case includes any of these and the resident’s role is one ticked below.'),
+        groupList('procedure_ids', procGroups),
+        h('h3', { style: { fontSize: '14px', margin: '14px 0 4px' } }, 'Roles'),
+        h('p', { class: 'hint' }, 'For the procedures above; none ticked means any role. With no procedures, the role alone suggests it (e.g. teaching assistant).'),
+        active(cfg.roles).map((r) => box('role_ids', r))),
+      h('label', { class: 'check', style: { display: 'flex', marginTop: '12px' } }, visible, ' Show this EPA in the app'),
+    ],
+    buttons: [{ label: 'Cancel', value: false, kind: 'ghost' }, { label: 'Save', value: true, kind: 'primary' }],
+  });
+  if (!ok) return;
+  const ordered = (set, list) => list.filter((x) => set.has(x.id)).sort(byOrder).map((x) => x.id);
+  const { error } = await updateRow('epas', epa.id, {
+    task_ids: ordered(chosen.task_ids, cfg.tasks),
+    procedure_ids: ordered(chosen.procedure_ids, cfg.procedures),
+    role_ids: ordered(chosen.role_ids, cfg.roles),
+    active: visible.checked,
+  });
+  if (error) return toast(errorText(error), 'error');
+  toast('Saved');
+  await changed();
 }

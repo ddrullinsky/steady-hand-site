@@ -19,6 +19,7 @@ export const CONFIG_TABLES = {
   attendings: 'attendings',
   fields: 'program_fields',
   targets: 'targets',
+  epas: 'epas',
 };
 
 /** Shared app state. Views read from here; loaders fill it. */
