@@ -382,6 +382,206 @@ export const ACHIEVEMENTS = [
     "hidden": true
   },
   {
+    "id": "licensed-plumber",
+    "tier": "major",
+    "title": "Licensed Plumber",
+    "rule": "First CABG (incl. MID-CAB, robotic) as primary operator",
+    "message": "Your first CABG as primary operator. You rerouted traffic around a blocked road using spare parts from the same patient. Plumbers do this every day and nobody gives them confetti. You get confetti.",
+    "reward": "A Gold Box. Contents: a pipe wrench, 2 mm. For very small pipes.",
+    "announcement": "did their first CABG as primary operator. The System has updated their job title to Licensed Plumber, pending review.",
+    "hidden": false
+  },
+  {
+    "id": "valve-job",
+    "tier": "major",
+    "title": "Valve Job",
+    "rule": "First valve operation as primary operator",
+    "message": "Your first valve operation as primary operator. You took out a part that had been working for decades and put in a new one. Mechanics charge more for less.",
+    "reward": "A Gold Box. Contents: a lifetime warranty. It belongs to the patient, not you.",
+    "announcement": "did their first valve operation as primary operator. The heart has been serviced. The invoice is in the mail.",
+    "hidden": false
+  },
+  {
+    "id": "root-access",
+    "tier": "major",
+    "title": "Root Access",
+    "rule": "First Aortic Surgery case as primary operator",
+    "message": "Your first aortic operation as primary operator. You now have root access. Use it responsibly. The System has seen what happens when people don't.",
+    "reward": "A Platinum Box. Encrypted. The password is \"cross-clamp\".",
+    "announcement": "did their first aortic operation as primary operator. They have been granted root access. The admins are nervous.",
+    "hidden": false
+  },
+  {
+    "id": "century-of-distals",
+    "tier": "major",
+    "title": "Century of Distals",
+    "rule": "100 distal anastomoses (task counts added up)",
+    "message": "One hundred distal anastomoses. Hundreds of stitches, each finer than an eyelash, placed on a moving target while someone hums. Your hands are steady. Your coffee intake is not.",
+    "reward": "A Legendary Box. Contents: one strand of 8-0 Prolene. Do not drop it. You dropped it.",
+    "announcement": "has sewn 100 distal anastomoses. Their loupes have filed for overtime.",
+    "hidden": false
+  },
+  {
+    "id": "change-of-heart",
+    "tier": "major",
+    "title": "Change of Heart",
+    "rule": "Took part in a heart transplant (any role)",
+    "message": "You were part of a heart transplant. A whole team, working through the night, for a stranger. The System had a joke ready and has decided to keep it to itself.",
+    "reward": "A Mythic Box. Contents: perspective. Handle with care.",
+    "announcement": "took part in a heart transplant. The System is, briefly, impressed.",
+    "hidden": false
+  },
+  {
+    "id": "saw-whisperer",
+    "tier": "minor",
+    "title": "Saw Whisperer",
+    "rule": "10 full sternotomies",
+    "message": "Ten sternotomies. You and the sternal saw have an understanding. It does the loud part. You take the credit.",
+    "reward": "A Bronze Box, already split neatly down the middle.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "mammary-lane",
+    "tier": "minor",
+    "title": "Mammary Lane",
+    "rule": "First LIMA or RIMA harvest",
+    "message": "Your first internal mammary harvest. Slow, delicate work done staring up at the inside of a chest wall. Your neck would like to file a complaint.",
+    "reward": "A Silver Box. Contents: a clip applier with a mind of its own.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "leg-day",
+    "tier": "minor",
+    "title": "Leg Day",
+    "rule": "10 saphenous vein harvests",
+    "message": "Ten saphenous vein harvests. Nobody skips leg day in cardiac surgery. Mostly because it is someone else's leg.",
+    "reward": "A Bronze Box. Contents: one compression stocking. The other one is somewhere in OR 4.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "pump-primed",
+    "tier": "minor",
+    "title": "Pump Primed",
+    "rule": "25 initiations of CPB",
+    "message": "Twenty-five times you said \"go on bypass\" and a machine took over the heart and lungs. The perfusionist now nods at you in the hallway. From a perfusionist, that is basically a hug.",
+    "reward": "A Bronze Box. Contents: a mug that says \"I heart perfusion\". The heart is a pump. Of course it is.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "gentle-landing",
+    "tier": "minor",
+    "title": "Gentle Landing",
+    "rule": "First weaning from CPB",
+    "message": "You weaned a patient off bypass. The heart took the job back. You watched the pressures the way a hawk watches a field mouse.",
+    "reward": "A Bronze Box. Contents: a tray table, in its upright and locked position.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "coronary-cartographer",
+    "tier": "minor",
+    "title": "Coronary Cartographer",
+    "rule": "50 distal anastomoses",
+    "message": "Fifty distal anastomoses. You know the coronary tree better than your own street. To be fair, you are rarely on your street.",
+    "reward": "A Bronze Box. Contents: a magnifying glass. You already own a better one.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "spaghetti-junction",
+    "tier": "minor",
+    "title": "Spaghetti Junction",
+    "rule": "A CABG with 5 or more grafts",
+    "message": "Five or more grafts in one case. From above, the heart now looks like a highway interchange designed by committee. It works beautifully.",
+    "reward": "A Silver Box. Contents: a road map. Every road leads to the LAD.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "ring-bearer",
+    "tier": "minor",
+    "title": "Ring Bearer",
+    "rule": "First mitral annuloplasty ring",
+    "message": "Your first mitral annuloplasty ring. Very small, very round, and very much not the ring your family keeps asking about.",
+    "reward": "A Silver Box. Contents: a ring sizer. Not suitable for proposals.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "balloon-animal",
+    "tier": "minor",
+    "title": "Balloon Animal",
+    "rule": "First IABP insertion",
+    "message": "Your first intra-aortic balloon pump. It inflates, it deflates, it is perfectly timed. It is the only balloon at this party.",
+    "reward": "A Bronze Box. Contents: a balloon shaped like a sausage. It is supposed to be.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "plan-e",
+    "tier": "minor",
+    "title": "Plan E",
+    "rule": "First ECMO insertion",
+    "message": "Your first ECMO cannulation. A machine now does the work of the heart and lungs while everyone else works out the plan. You are part of the plan now.",
+    "reward": "A Silver Box. Contents: a very long tube. Labelled. Twice.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "rhythm-section",
+    "tier": "minor",
+    "title": "The Rhythm Section",
+    "rule": "First MAZE",
+    "message": "Your first MAZE. You drew a careful pattern of lines on a heart so it would stop improvising. The System approves of order.",
+    "reward": "A Bronze Box. Contents: a metronome.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "tiny-hearts",
+    "tier": "minor",
+    "title": "Tiny Hearts",
+    "rule": "First congenital case",
+    "message": "Your first congenital case. Everything is smaller, finer and more delicate, including your confidence. Breathe. They do this here every day.",
+    "reward": "A Silver Box. Pediatric size. Your hand does not fit in it.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "no-pump-no-problem",
+    "tier": "minor",
+    "title": "No Pump, No Problem",
+    "rule": "First off-pump case",
+    "message": "An off-pump case. Sewing on a beating heart. The target moves seventy times a minute and so, now, does your blood pressure.",
+    "reward": "A Silver Box. It will not hold still.",
+    "announcement": null,
+    "hidden": false
+  },
+  {
+    "id": "crash-course",
+    "tier": "minor",
+    "title": "Crash Course",
+    "rule": "A crash sternotomy",
+    "message": "A crash sternotomy. No time to think, only time to do. You did. Your own heart rate is now under review by the System.",
+    "reward": "A Silver Box, opened very fast. Contents: adrenaline. Yours.",
+    "announcement": null,
+    "hidden": true
+  },
+  {
+    "id": "deja-vu",
+    "tier": "minor",
+    "title": "Déjà Vu",
+    "rule": "A redo sternotomy",
+    "message": "A redo sternotomy. Someone has been here before you. They left adhesions, wires and no forwarding address.",
+    "reward": "A Bronze Box, stuck shut. Gentle dissection required.",
+    "announcement": null,
+    "hidden": true
+  },
+  {
     "id": "full-house",
     "tier": "major",
     "title": "Full House",
