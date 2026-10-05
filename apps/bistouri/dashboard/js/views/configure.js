@@ -175,7 +175,7 @@ function renderTasks(panel, usage) {
 
   panel.append(h('div', { class: 'editor-toolbar' },
     h('div', null, h('h2', { style: { fontSize: '16px' } }, 'Procedural tasks'),
-      h('div', { class: 'hint' }, 'Steps a resident ticks for a case, with a count (e.g. distal anastomosis ×3). ',
+      h('div', { class: 'hint' }, 'Steps a resident ticks for a case. Tick “Count” for steps done more than once per case (e.g. distal anastomosis ×3); the others are a plain tick. ',
         'Sections group them in operative order; a section linked to procedure categories opens by itself in the app for those procedures.')),
     h('div', { class: 'toolbar' },
       searchBox('Search tasks'),
@@ -194,12 +194,24 @@ function renderTasks(panel, usage) {
   }, sections.map((s) => h('option', { value: s.id, selected: s.id === t.section_id }, s.name)),
   h('option', { value: '', selected: !known.has(t.section_id) }, 'No section'));
 
+  // Countable tasks get a − n + stepper in the app; the rest are a plain tick.
+  const countToggle = (t) => h('label', { class: 'check small', title: 'Residents log how many times (e.g. distal anastomosis ×3)' },
+    h('input', {
+      type: 'checkbox', checked: !!t.countable, 'aria-label': `Count ${t.name}`,
+      onchange: async (e) => {
+        const { error } = await updateRow('procedural_tasks', t.id, { countable: e.target.checked });
+        if (error) { e.target.checked = !e.target.checked; return toast(errorText(error), 'error'); }
+        t.countable = e.target.checked;
+        toast(t.countable ? 'Residents can now log a count' : 'Now a plain tick');
+      },
+    }), 'Count');
+
   const taskEditor = (sid, list) => listEditor({
     table: 'procedural_tasks', rows: list, noun: 'task', filter: ui.q,
     usage: (t) => usage.tasks.get(t.id) || 0,
     defaults: { program_id: state.program.id, section_id: sid },
     addKey: `tasks:${sid || 'none'}`, onChanged: changed,
-    rowExtra: sections.length ? moveSelect : null,
+    rowExtra: (t) => [countToggle(t), sections.length ? moveSelect(t) : null],
     deleteNote: (t) => { const n = targetsUsing('task_id', t.id); return n ? `${plural(n, 'target')} that use${n === 1 ? 's' : ''} it will also be deleted.` : null; },
   });
 

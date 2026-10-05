@@ -525,7 +525,7 @@ export const ACHIEVEMENTS = [
     "id": "plan-e",
     "tier": "minor",
     "title": "Plan E",
-    "rule": "First ECMO insertion",
+    "rule": "First ECMO insertion (VA or VV)",
     "message": "Your first ECMO cannulation. A machine now does the work of the heart and lungs while everyone else works out the plan. You are part of the plan now.",
     "reward": "A Silver Box. Contents: a very long tube. Labelled. Twice.",
     "announcement": null,
