@@ -78,7 +78,7 @@ export function render(main, { rerender }) {
     }
   }
   feed.append(h('p', { class: 'hint', style: { marginTop: '12px' } },
-    'Minor achievements stay on residents’ phones and are not shown here. Residents who announce anonymously appear as “A resident”.'));
+    'Minor achievements are not announced; each resident’s page shows all of theirs. Residents who announce anonymously appear as “A resident”.'));
 
   // --- by achievement
   const table = h('div', { class: 'panel' },
@@ -110,7 +110,7 @@ function cataloguePanel(unlocks, rerender) {
       h('div', null, h('h2', null, 'Every achievement'),
         h('div', { class: 'hint' }, catalogueTier === 'major'
           ? 'Announced to the program when unlocked. The resident sees the notification; everyone sees the announcement.'
-          : 'Stay on the resident’s phone; never shown here when unlocked. Hidden ones show as “???” until earned.')),
+          : 'Not announced to the program; each resident’s page shows theirs. Hidden ones show as “???” in the app until earned.')),
       h('div', { class: 'toolbar' },
         tab('major', `Major (${ACHIEVEMENTS.filter((a) => a.tier === 'major').length})`),
         tab('minor', `Minor (${ACHIEVEMENTS.filter((a) => a.tier === 'minor').length})`))),

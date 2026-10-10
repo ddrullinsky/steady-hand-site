@@ -3,7 +3,7 @@
 import { state } from '../api.js';
 import {
   h, clear, icon, fmtDate, fmtNum, pct, personName, pgyLabel, today, addMonths, academicYearStart,
-  academicYearLabel, monthRange, monthKey, fmtMonth, emptyState, toast, relDays, byOrder,
+  academicYearLabel, monthRange, monthKey, fmtMonth, emptyState, toast, relDays, byOrder, isoDate,
 } from '../util.js';
 import {
   casesByResident, inRange, activeTargets, targetCount, targetTitle, targetDetail, roleOrder, roleName,
@@ -12,6 +12,7 @@ import {
 } from '../stats.js';
 import { barChart } from '../charts.js';
 import { exportCasesCSV } from '../export.js';
+import { residentAchievements } from '../achievementEngine.js';
 
 const range = { preset: 'all', from: '', to: '', printCases: true };
 
@@ -145,6 +146,7 @@ export function render(main, { args, rerender }) {
     tPanel.append(list);
   }
   main.append(tPanel);
+  main.append(achievementsPanel(uid, allCases));
 
   if (!allCases.length) {
     main.append(emptyState(`${name} has not logged any cases yet`,
@@ -226,6 +228,47 @@ export function render(main, { args, rerender }) {
     : emptyState('No cases in this period', 'Choose a wider period above.'));
   main.append(listPanel);
   main.append(signatures());
+}
+
+/** Major and minor achievements, worked out from the resident's cases the way
+ *  the app does. Dates come from the program feed (majors announced by name). */
+function achievementsPanel(uid, allCases) {
+  const all = residentAchievements(allCases);
+  const unlocked = new Map(state.achievements.filter((u) => u.user_id === uid && u.display_name)
+    .map((u) => [u.achievement_id, u.unlocked_at]));
+  const tierCount = (tier) => {
+    const list = all.filter((a) => a.tier === tier);
+    return `${list.filter((a) => a.earned).length} of ${list.length} ${tier}`;
+  };
+  const card = (a) => {
+    const secret = a.hidden && !a.earned;
+    const when = a.earned && unlocked.get(a.id);
+    return h('article', { class: `ach-mini${a.earned ? ' earned' : ''}${a.tier === 'major' ? ' major' : ''}` },
+      h('div', { class: 'ach-head' },
+        h('h3', null, secret ? '???' : a.title),
+        h('span', { class: `badge${a.tier === 'major' ? ' brand' : ''}` }, a.tier)),
+      h('div', { class: 'ach-rule' }, secret ? 'Hidden until earned' : a.rule || ''),
+      !a.earned && a.need > 1 ? h('div', { class: 'bar', role: 'progressbar', 'aria-valuenow': String(a.have),
+        'aria-valuemin': '0', 'aria-valuemax': String(a.need), 'aria-label': a.title },
+      h('span', { style: { width: `${Math.min(100, (a.have / a.need) * 100)}%` } })) : null,
+      !a.earned && a.need > 1 ? h('div', { class: 'ach-rule' }, `${fmtNum(a.have)} / ${fmtNum(a.need)}`) : null,
+      when ? h('div', { class: 'ach-rule' }, `Announced ${fmtDate(isoDate(new Date(when)))}`) : null);
+  };
+  const sort = (list) => list.sort((a, b) => (a.tier === b.tier ? 0 : a.tier === 'major' ? -1 : 1));
+  const earned = sort(all.filter((a) => a.earned));
+  const locked = sort(all.filter((a) => !a.earned))
+    .sort((a, b) => ((b.need > 1 ? b.have / b.need : 0) - (a.need > 1 ? a.have / a.need : 0)));
+  return h('div', { class: 'panel no-print' },
+    h('div', { class: 'panel-head' }, h('h2', null, 'Achievements'),
+      h('div', { class: 'toolbar' },
+        h('span', { class: 'badge plain brand' }, tierCount('major')),
+        h('span', { class: 'badge plain outline' }, tierCount('minor')))),
+    earned.length ? h('div', { class: 'ach-grid' }, earned.map(card)) : emptyState('No achievements yet', null),
+    locked.length ? h('details', { class: 'ach-locked' },
+      h('summary', null, `Not yet earned (${locked.length})`),
+      h('div', { class: 'ach-grid' }, locked.map(card))) : null,
+    h('p', { class: 'hint', style: { marginTop: '12px' } },
+      'Worked out from their logged cases, the same way the app does.'));
 }
 
 function tileEl(label, value, note, accent) {

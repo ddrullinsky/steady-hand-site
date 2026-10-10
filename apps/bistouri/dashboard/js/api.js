@@ -109,7 +109,7 @@ export async function loadAchievements(pid = state.program.id) {
 
 export async function loadCases(pid = state.program.id) {
   const rows = await fetchAll(() => sb.from('cases')
-    .select('id,resident_id,case_date,site_id,attending_id,attending_name,urgency,approach_id,role_id,field_values,' +
+    .select('id,resident_id,case_date,created_at,site_id,attending_id,attending_name,urgency,approach_id,role_id,field_values,' +
             'case_procedures(procedure_id),case_tasks(task_id,count)')
     .eq('program_id', pid).eq('deleted', false)
     .order('case_date', { ascending: false }).order('id'));
