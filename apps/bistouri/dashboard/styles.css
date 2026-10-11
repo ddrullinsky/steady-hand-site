@@ -489,6 +489,11 @@ dialog.modal h2 { font-size: 18px; margin-bottom: 10px; }
 .ach-mini.earned.major { border-color: var(--gold); }
 .ach-mini h3 { font-size: 14px; }
 .ach-mini .bar { margin-top: 6px; }
+.ach-mini { cursor: pointer; }
+.ach-mini:hover, .ach-mini:focus-visible { border-color: var(--brand); }
+.ach-mini .ach-full { display: none; }
+.ach-mini.open { grid-column: 1 / -1; opacity: 1; }
+.ach-mini.open .ach-full { display: block; }
 .ach-locked { margin-top: 14px; }
 .ach-locked summary { cursor: pointer; font-weight: 600; font-size: 13.5px; color: var(--ink-2); margin-bottom: 10px; }
 .task-groups { max-height: 55vh; overflow-y: auto; padding-right: 4px; }

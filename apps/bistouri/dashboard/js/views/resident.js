@@ -146,7 +146,7 @@ export function render(main, { args, rerender }) {
     tPanel.append(list);
   }
   main.append(tPanel);
-  main.append(achievementsPanel(uid, allCases));
+  main.append(achievementsPanel(uid, allCases, name));
 
   if (!allCases.length) {
     main.append(emptyState(`${name} has not logged any cases yet`,
@@ -232,7 +232,7 @@ export function render(main, { args, rerender }) {
 
 /** Major and minor achievements, worked out from the resident's cases the way
  *  the app does. Dates come from the program feed (majors announced by name). */
-function achievementsPanel(uid, allCases) {
+function achievementsPanel(uid, allCases, name) {
   const all = residentAchievements(allCases);
   const unlocked = new Map(state.achievements.filter((u) => u.user_id === uid && u.display_name)
     .map((u) => [u.achievement_id, u.unlocked_at]));
@@ -240,10 +240,23 @@ function achievementsPanel(uid, allCases) {
     const list = all.filter((a) => a.tier === tier);
     return `${list.filter((a) => a.earned).length} of ${list.length} ${tier}`;
   };
+  // A click opens the full text, as the resident sees it (hidden ones included:
+  // the catalogue on the Achievements page shows them too).
+  const toggle = (el) => {
+    const open = el.classList.toggle('open');
+    el.setAttribute('aria-expanded', String(open));
+    el.querySelector('h3').textContent = open || !el.dataset.secret ? el.dataset.title : '???';
+  };
   const card = (a) => {
     const secret = a.hidden && !a.earned;
     const when = a.earned && unlocked.get(a.id);
-    return h('article', { class: `ach-mini${a.earned ? ' earned' : ''}${a.tier === 'major' ? ' major' : ''}` },
+    return h('article', {
+      class: `ach-mini${a.earned ? ' earned' : ''}${a.tier === 'major' ? ' major' : ''}`,
+      role: 'button', tabindex: '0', 'aria-expanded': 'false',
+      dataset: { title: a.title, ...(secret ? { secret: '1' } : {}) },
+      onclick: (e) => toggle(e.currentTarget),
+      onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e.currentTarget); } },
+    },
       h('div', { class: 'ach-head' },
         h('h3', null, secret ? '???' : a.title),
         h('span', { class: `badge${a.tier === 'major' ? ' brand' : ''}` }, a.tier)),
@@ -252,7 +265,12 @@ function achievementsPanel(uid, allCases) {
         'aria-valuemin': '0', 'aria-valuemax': String(a.need), 'aria-label': a.title },
       h('span', { style: { width: `${Math.min(100, (a.have / a.need) * 100)}%` } })) : null,
       !a.earned && a.need > 1 ? h('div', { class: 'ach-rule' }, `${fmtNum(a.have)} / ${fmtNum(a.need)}`) : null,
-      when ? h('div', { class: 'ach-rule' }, `Announced ${fmtDate(isoDate(new Date(when)))}`) : null);
+      when ? h('div', { class: 'ach-rule' }, `Announced ${fmtDate(isoDate(new Date(when)))}`) : null,
+      h('div', { class: 'ach-full' },
+        secret && a.rule ? h('div', { class: 'ach-rule' }, a.rule) : null,
+        h('p', { class: 'ach-message' }, a.message),
+        h('p', { class: 'ach-reward' }, h('strong', null, 'Reward: '), a.reward),
+        a.announcement ? h('p', { class: 'ach-announce' }, h('span', { class: 'system' }, 'Announcement'), `${name} ${a.announcement}`) : null));
   };
   const sort = (list) => list.sort((a, b) => (a.tier === b.tier ? 0 : a.tier === 'major' ? -1 : 1));
   const earned = sort(all.filter((a) => a.earned));
@@ -268,7 +286,7 @@ function achievementsPanel(uid, allCases) {
       h('summary', null, `Not yet earned (${locked.length})`),
       h('div', { class: 'ach-grid' }, locked.map(card))) : null,
     h('p', { class: 'hint', style: { marginTop: '12px' } },
-      'Worked out from their logged cases, the same way the app does.'));
+      'Worked out from their logged cases, the same way the app does. Click an achievement for its full text.'));
 }
 
 function tileEl(label, value, note, accent) {
