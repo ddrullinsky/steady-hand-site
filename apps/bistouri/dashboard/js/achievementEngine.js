@@ -215,12 +215,11 @@ export function residentAchievements(cases) {
 
   // Cardiac surgery
   if (ref.procedures.some((p) => p.name.startsWith('CABGx'))) {
-    const cabg = procs((n) => n.startsWith('CABGx') || ['MID-CAB', 'Robotic CABG'].includes(n));
+    const cabg = procs((n) => n.startsWith('CABGx'));
     const valves = procs(['Aortic valve repair', 'Aortic valve replacement', 'Aortic valve replacement after failed repair',
       'Aortic valve re-replacement', 'Mitral valve repair', 'Mitral valve replacement',
       'Mitral valve replacement after repair', 'Tricuspid valve repair', 'Tricuspid valve replacement',
-      'Pulmonic valve repair', 'Pulmonic valve replacement', 'Mini-MV repair', 'Mini-MV replacement',
-      'Robotic MV repair', 'Bentall', 'Ross procedure']);
+      'Pulmonic valve repair', 'Pulmonic valve replacement', 'Bentall', 'Ross procedure']);
     const distals = tasks(['Distal anastomosis']);
     count('licensed-plumber', casesWith(cabg, true), 1);
     count('valve-job', casesWith(valves, true), 1);
@@ -241,8 +240,7 @@ export function residentAchievements(cases) {
     count('plan-e', casesWith(procs((n) => n.endsWith('ECMO insertion'))), 1);
     count('rhythm-section', casesWith(procs((n) => n.startsWith('MAZE'))), 1);
     count('tiny-hearts', casesWith(procsInCategory('Congenital')), 1);
-    const offPump = approach(/off-pump/i);
-    if (offPump) add('no-pump-no-problem', f.approachesUsed.has(offPump));
+    if (ref.fields.some((x) => x.key === 'off_pump')) add('no-pump-no-problem', cases.some((c) => c.field_values?.off_pump === true));
     add('crash-course', taskTotal(tasks(['Crash sternotomy'])) > 0);
     add('deja-vu', taskTotal(tasks(['Redo sternotomy'])) > 0);
   }

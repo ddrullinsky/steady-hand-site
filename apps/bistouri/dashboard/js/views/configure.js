@@ -653,11 +653,13 @@ function epaRule(epa) {
   const names = (ids, map) => ids.map((id) => map.get(id)?.name).filter(Boolean);
   const tasks = names(epa.task_ids || [], cfg.byId.tasks);
   const procs = names(epa.procedure_ids || [], cfg.byId.procedures);
+  const approaches = names(epa.approach_ids || [], cfg.byId.approaches);
   const roles = names(epa.role_ids || [], cfg.byId.roles);
   const list = (xs) => (xs.length > 3 ? `${xs.slice(0, 3).join(', ')} +${xs.length - 3}` : xs.join(', '));
   const parts = [];
   if (tasks.length) parts.push(`task: ${list(tasks)}`);
-  if (procs.length) parts.push(`${list(procs)}${roles.length ? ` as ${roles.join(' or ')}` : ''}`);
+  const cases = [procs.length ? list(procs) : null, approaches.length ? `${approaches.join(' or ')} approach` : null].filter(Boolean);
+  if (cases.length) parts.push(`${cases.join(' or ')}${roles.length ? ` as ${roles.join(' or ')}` : ''}`);
   else if (roles.length) parts.push(`any case as ${roles.join(' or ')}`);
   return parts.length ? parts.join('; or ') : null;
 }
@@ -670,7 +672,7 @@ function renderEPAs(panel) {
   panel.append(h('div', { class: 'editor-toolbar' },
     h('div', null, h('h2', { style: { fontSize: '16px' } }, 'EPAs'),
       h('div', { class: 'hint' }, 'After a case, the app lists the EPAs it could count toward, so the resident can ask the attending to assess them. ',
-        'An EPA is suggested when the resident ticks one of its tasks (any role), or logs one of its procedures in one of its roles. ',
+        'An EPA is suggested when the resident ticks one of its tasks (any role), or logs one of its procedures or approaches in one of its roles. ',
         'The app shows the EPAs of the resident’s stage, judged from their PGY year.')),
     h('div', { class: 'toolbar' }, searchBox('Search EPAs'))));
 
@@ -702,7 +704,10 @@ function renderEPAs(panel) {
 
 async function editEPA(epa) {
   const cfg = state.config;
-  const chosen = { task_ids: new Set(epa.task_ids || []), procedure_ids: new Set(epa.procedure_ids || []), role_ids: new Set(epa.role_ids || []) };
+  const chosen = {
+    task_ids: new Set(epa.task_ids || []), procedure_ids: new Set(epa.procedure_ids || []),
+    approach_ids: new Set(epa.approach_ids || []), role_ids: new Set(epa.role_ids || []),
+  };
   const box = (key, item) => h('label', { class: 'check', style: { display: 'flex', margin: '3px 0' } },
     h('input', { type: 'checkbox', checked: chosen[key].has(item.id), onchange: (e) => (e.target.checked ? chosen[key].add(item.id) : chosen[key].delete(item.id)) }),
     ' ', item.name);
@@ -733,8 +738,13 @@ async function editEPA(epa) {
         h('h3', { style: { fontSize: '14px', margin: '14px 0 4px' } }, 'Procedures'),
         h('p', { class: 'hint' }, 'Suggested when the case includes any of these and the resident’s role is one ticked below.'),
         groupList('procedure_ids', procGroups),
+        active(cfg.approaches).length ? [
+          h('h3', { style: { fontSize: '14px', margin: '14px 0 4px' } }, 'Approaches'),
+          h('p', { class: 'hint' }, 'Suggested when the case was done this way, whatever the procedure, and the resident’s role is one ticked below.'),
+          active(cfg.approaches).map((a) => box('approach_ids', a)),
+        ] : null,
         h('h3', { style: { fontSize: '14px', margin: '14px 0 4px' } }, 'Roles'),
-        h('p', { class: 'hint' }, 'For the procedures above; none ticked means any role. With no procedures, the role alone suggests it (e.g. teaching assistant).'),
+        h('p', { class: 'hint' }, 'For the procedures and approaches above; none ticked means any role. With neither, the role alone suggests it (e.g. teaching assistant).'),
         active(cfg.roles).map((r) => box('role_ids', r))),
       h('label', { class: 'check', style: { display: 'flex', marginTop: '12px' } }, visible, ' Show this EPA in the app'),
     ],
@@ -745,6 +755,7 @@ async function editEPA(epa) {
   const { error } = await updateRow('epas', epa.id, {
     task_ids: ordered(chosen.task_ids, cfg.tasks),
     procedure_ids: ordered(chosen.procedure_ids, cfg.procedures),
+    approach_ids: ordered(chosen.approach_ids, cfg.approaches),
     role_ids: ordered(chosen.role_ids, cfg.roles),
     active: visible.checked,
   });
