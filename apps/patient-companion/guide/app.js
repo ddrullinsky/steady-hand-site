@@ -6,7 +6,7 @@
 // Only the language and the disclaimer acknowledgement are saved (localStorage);
 // the page makes no requests beyond its own files.
 
-import * as L from "./logic.js?v=135dd045a9";
+import * as L from "./logic.js?v=33b6ab48ec";
 
 // ---------------------------------------------------------------- storage
 // Keys match the app's UserDefaults keys, so the two read the same.
@@ -36,7 +36,18 @@ const S = {
 };
 
 function loadState() {
-  const saved = store.get(K.lang);
+  // ?lang=fr|en comes from the site's French or English home page. It wins
+  // once, is saved, and is dropped from the address so a reload doesn't undo
+  // a later EN · FR toggle.
+  const params = new URLSearchParams(location.search);
+  const asked = params.get("lang");
+  if (asked === "fr" || asked === "en") {
+    store.set(K.lang, asked);
+    params.delete("lang");
+    const q = params.toString();
+    history.replaceState(null, "", location.pathname + (q ? `?${q}` : "") + location.hash);
+  }
+  const saved = asked === "fr" || asked === "en" ? asked : store.get(K.lang);
   S.lang = saved === "fr" || saved === "en"
     ? saved
     : ((navigator.language || "en").toLowerCase().startsWith("fr") ? "fr" : "en");
@@ -50,6 +61,7 @@ const WEB = {
   en: {
     patientGuide: "Patient guide", duration: "Duration", hospital: "Hospital", recovery: "Recovery",
     done: "Done", langLabel: "Switch to French", privacy: "Privacy", support: "Support", menu: "Sections",
+    privacyHref: "../privacy.html", supportHref: "../support.html",
     appTitle: "Follow your own surgery with the app",
     appBody: "The iPhone and iPad app adds the tools for your own journey: set your surgery date for a countdown and see which recovery week you are in, follow My path from surgery through intensive care, the ward and home, bookmark your operations, tick off your checklists and keep your care team's number one tap away. It works offline, and everything stays on your device.",
     appButton: "Download on the App Store",
@@ -60,6 +72,7 @@ const WEB = {
   fr: {
     patientGuide: "Guide du patient", duration: "Durée", hospital: "Hôpital", recovery: "Convalescence",
     done: "Terminé", langLabel: "Passer en anglais", privacy: "Confidentialité", support: "Assistance", menu: "Sections",
+    privacyHref: "../fr/confidentialite.html", supportHref: "../fr/assistance.html",
     appTitle: "Suivez votre propre chirurgie avec l\u2019application",
     appBody: "L\u2019application pour iPhone et iPad ajoute des outils pour votre propre parcours\u00a0: entrez la date de votre chirurgie pour voir un compte à rebours et votre semaine de convalescence, suivez Mon parcours de la chirurgie aux soins intensifs, à l\u2019unité de soins puis à la maison, épinglez vos opérations, cochez vos listes et gardez le numéro de votre équipe de soins à portée de main. Elle fonctionne hors ligne, et tout reste sur votre appareil.",
     appButton: "Télécharger dans l\u2019App Store",
@@ -250,7 +263,7 @@ function renderChrome(route) {
       <button class="em" data-action="emergency">${ICON.cross}<span>${esc(s.emergencyAction)}</span></button>
     </div></div>`;
   document.getElementById("foot").innerHTML = `<span>${esc(s.reviewedNote)}</span>
-    <a href="../privacy.html">${esc(W().privacy)}</a><a href="../support.html">${esc(W().support)}</a>`;
+    <a href="${W().privacyHref}">${esc(W().privacy)}</a><a href="${W().supportHref}">${esc(W().support)}</a>`;
   measureHeader();
 }
 
@@ -363,7 +376,7 @@ function disclaimerDialog() {
 function importantDialog() {
   const s = site();
   noticeDialog(s.importantTitle, `${paras(s.disclaimerBody)}<p>${esc(s.footerNote)}</p><p class="small mute">${esc(s.reviewedNote)}</p>
-    <p class="small"><a href="../privacy.html">${esc(W().privacy)}</a> · <a href="../support.html">${esc(W().support)}</a></p>`);
+    <p class="small"><a href="${W().privacyHref}">${esc(W().privacy)}</a> · <a href="${W().supportHref}">${esc(W().support)}</a></p>`);
 }
 
 // ---------------------------------------------------------------- events
@@ -397,7 +410,7 @@ document.addEventListener("click", (e) => {
 // ---------------------------------------------------------------- boot
 async function boot() {
   try {
-    const res = await fetch("content.json?v=135dd045a9", { cache: "no-cache" });
+    const res = await fetch("content.json?v=33b6ab48ec", { cache: "no-cache" });
     content = await res.json();
     if (!content.en || !content.fr) throw new Error("content");
   } catch {
