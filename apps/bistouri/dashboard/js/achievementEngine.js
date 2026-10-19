@@ -33,6 +33,20 @@ function refData() {
   return ref;
 }
 
+/** The specialty whose achievements this program gets, matched like the rules below. */
+export function programSpecialty() {
+  const procs = state.config?.procedures ?? [];
+  if (procs.some((p) => p.name.startsWith('CABGx'))) return 'cardiac';
+  if (procs.some((p) => p.name === 'EVAR')) return 'vascular';
+  return null;
+}
+
+/** The catalogue entries that apply to this program: general ones plus its specialty's. */
+export function programCatalogue() {
+  const specialty = programSpecialty();
+  return ACHIEVEMENTS.filter((a) => !a.specialty || a.specialty === specialty);
+}
+
 function targetTitle(t, ref) {
   if (t.label?.trim()) return t.label;
   const name = (list, id) => list.find((x) => x.id === id)?.name;
@@ -243,6 +257,37 @@ export function residentAchievements(cases) {
     if (ref.fields.some((x) => x.key === 'off_pump')) add('no-pump-no-problem', cases.some((c) => c.field_values?.off_pump === true));
     add('crash-course', taskTotal(tasks(['Crash sternotomy'])) > 0);
     add('deja-vu', taskTotal(tasks(['Redo sternotomy'])) > 0);
+  }
+
+  // Vascular surgery
+  if (ref.procedures.some((p) => p.name === 'EVAR')) {
+    const branched = ['FEVAR', 'BEVAR', 'Physician-modified endograft (PMEG)', 'Chimney/snorkel EVAR',
+      'TEVAR with arch branches (zone 0–2)', 'Iliac branch endoprosthesis (IBE)'];
+    const endoAortic = procs(['EVAR', 'TEVAR (aneurysm)', 'TEVAR (dissection)', 'TEVAR (blunt aortic injury)', ...branched]);
+    const ruptured = procs(['Ruptured AAA repair']);
+    count('neck-and-neck', casesWith(procs(['Carotid endarterectomy', 'Eversion carotid endarterectomy',
+      'Redo carotid endarterectomy']), true), 1);
+    count('cross-clamp-club', casesWith(new Set([...procsInCategory('Aortic – open'), ...ruptured]), true), 1);
+    count('wire-transfer', casesWith(endoAortic, true), 1);
+    count('long-distance', casesWith(procs(['Femoral-tibial/pedal bypass']), true), 1);
+    count('against-the-clock', casesWith(ruptured), 1);
+
+    count('thrill-seeker', taskTotal(tasks(['Arteriovenous anastomosis'])), 1);
+    count('access-granted', taskTotal(tasks(['Ultrasound-guided retrograde femoral access', 'Antegrade femoral access'])), 25);
+    count('branch-manager', casesWith(procs(branched)), 1);
+    count('thread-the-needle', taskTotal(tasks(['Target vessel cannulation and bridging stent'])), 1);
+    count('detour-ahead', taskTotal(tasks(['Carotid shunt insertion'])), 1);
+    count('measure-twice', casesWith(procsInCategory('Amputations'), true), 1);
+    count('under-pressure', casesWith(procs((n) => n.endsWith('fasciotomy'))), 1);
+    count('opening-act', casesWith(procs(['Anterior spine exposure', 'Vascular exposure for another service'])), 1);
+    count('outlet-shopping', casesWith(procs(['First rib resection (TOS)', 'Cervical rib resection'])), 1);
+    count('vein-glory', casesWith(procs(['Endovenous thermal ablation', 'Non-thermal venous ablation (cyanoacrylate/MOCA)'])), 1);
+    count('groin-pull', taskTotal(tasks(['Groin (femoral) exposure'])), 10);
+    count('vein-there', taskTotal(tasks(['Great saphenous vein harvest'])), 10);
+    count('stent-collector', taskTotal(tasks(['Stent deployment', 'Target vessel cannulation and bridging stent'])), 50);
+    const hybrid = approach(/hybrid/i);
+    if (hybrid) add('best-of-both-worlds', f.approachesUsed.has(hybrid));
+    add('zone-defence', casesWith(procs(['REBOA'])) > 0);
   }
 
   // Program categories and targets

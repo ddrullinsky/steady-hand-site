@@ -4,10 +4,12 @@ import { state } from '../api.js';
 import { h, today, addDays, academicYearStart, isoDate, fmtDate, relDays, fmtNum, plural, emptyState } from '../util.js';
 import { residents } from '../stats.js';
 import { ACHIEVEMENTS } from '../achievementCatalogue.js';
+import { programCatalogue } from '../achievementEngine.js';
 
 // Texts are generated from the app (scripts/build_achievement_catalogue.py).
-const MAJORS = ACHIEVEMENTS.filter((a) => a.tier === 'major').map((a) => ({ ...a, text: a.announcement }));
-const BY_ID = new Map(MAJORS.map((m) => [m.id, m]));
+const toMajor = (a) => ({ ...a, text: a.announcement });
+// Every major, so the feed can show any unlock; the lists below keep the program's own.
+const BY_ID = new Map(ACHIEVEMENTS.filter((a) => a.tier === 'major').map((a) => [a.id, toMajor(a)]));
 
 let filter = '';
 let shown = 50;
@@ -31,6 +33,8 @@ function who(u) {
 
 export function render(main, { rerender }) {
   const p = state.program;
+  const catalogue = programCatalogue();
+  const MAJORS = catalogue.filter((a) => a.tier === 'major').map(toMajor);
   const unlocks = state.achievements.filter((u) => BY_ID.has(u.achievement_id));
   const t = today();
   const res = residents();
@@ -95,12 +99,12 @@ export function render(main, { rerender }) {
       })))));
 
   main.append(h('div', { class: 'grid-2' }, feed, table));
-  main.append(cataloguePanel(unlocks, rerender));
+  main.append(cataloguePanel(catalogue, unlocks, rerender));
 }
 
-/** Every achievement with the notification residents see. */
-function cataloguePanel(unlocks, rerender) {
-  const list = ACHIEVEMENTS.filter((a) => a.tier === catalogueTier);
+/** Every achievement the program's residents can earn, with the notification they see. */
+function cataloguePanel(catalogue, unlocks, rerender) {
+  const list = catalogue.filter((a) => a.tier === catalogueTier);
   const tab = (tier, label) => h('button', {
     class: `btn btn-sm${catalogueTier === tier ? ' btn-primary' : ' btn-ghost'}`, 'aria-pressed': String(catalogueTier === tier),
     onclick: () => { catalogueTier = tier; rerender(); },
@@ -112,8 +116,8 @@ function cataloguePanel(unlocks, rerender) {
           ? 'Announced to the program when unlocked. The resident sees the notification; everyone sees the announcement.'
           : 'Not announced to the program; each resident’s page shows theirs. Hidden ones show as “???” in the app until earned.')),
       h('div', { class: 'toolbar' },
-        tab('major', `Major (${ACHIEVEMENTS.filter((a) => a.tier === 'major').length})`),
-        tab('minor', `Minor (${ACHIEVEMENTS.filter((a) => a.tier === 'minor').length})`))),
+        tab('major', `Major (${catalogue.filter((a) => a.tier === 'major').length})`),
+        tab('minor', `Minor (${catalogue.filter((a) => a.tier === 'minor').length})`))),
     h('div', { class: 'catalogue' }, list.map((a) => {
       const n = unlocks.filter((u) => u.achievement_id === a.id).length;
       return h('article', { class: 'ach' },
