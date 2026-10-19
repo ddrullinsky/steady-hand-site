@@ -695,6 +695,17 @@ export const ACHIEVEMENTS = [
     "specialty": "vascular"
   },
   {
+    "id": "heavy-metal",
+    "tier": "major",
+    "title": "Heavy Metal",
+    "rule": "100 stents (stent deployments and bridging stents added up)",
+    "message": "One hundred stents. A small hardware store's worth of metal, left in arteries all over the city, every piece placed on purpose. Your thyroid shield has seen things.",
+    "reward": "A Legendary Box. Contents: a lead apron with your name embroidered on it. It still weighs nine kilos.",
+    "announcement": "has deployed 100 stents. Airport security has started asking them questions.",
+    "hidden": false,
+    "specialty": "vascular"
+  },
+  {
     "id": "thrill-seeker",
     "tier": "minor",
     "title": "Thrill Seeker",

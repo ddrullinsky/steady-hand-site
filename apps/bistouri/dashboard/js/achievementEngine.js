@@ -265,12 +265,14 @@ export function residentAchievements(cases) {
       'TEVAR with arch branches (zone 0–2)', 'Iliac branch endoprosthesis (IBE)'];
     const endoAortic = procs(['EVAR', 'TEVAR (aneurysm)', 'TEVAR (dissection)', 'TEVAR (blunt aortic injury)', ...branched]);
     const ruptured = procs(['Ruptured AAA repair']);
+    const stents = tasks(['Stent deployment', 'Target vessel cannulation and bridging stent']);
     count('neck-and-neck', casesWith(procs(['Carotid endarterectomy', 'Eversion carotid endarterectomy',
       'Redo carotid endarterectomy']), true), 1);
     count('cross-clamp-club', casesWith(new Set([...procsInCategory('Aortic – open'), ...ruptured]), true), 1);
     count('wire-transfer', casesWith(endoAortic, true), 1);
     count('long-distance', casesWith(procs(['Femoral-tibial/pedal bypass']), true), 1);
     count('against-the-clock', casesWith(ruptured), 1);
+    count('heavy-metal', taskTotal(stents), 100);
 
     count('thrill-seeker', taskTotal(tasks(['Arteriovenous anastomosis'])), 1);
     count('access-granted', taskTotal(tasks(['Ultrasound-guided retrograde femoral access', 'Antegrade femoral access'])), 25);
@@ -284,7 +286,7 @@ export function residentAchievements(cases) {
     count('vein-glory', casesWith(procs(['Endovenous thermal ablation', 'Non-thermal venous ablation (cyanoacrylate/MOCA)'])), 1);
     count('groin-pull', taskTotal(tasks(['Groin (femoral) exposure'])), 10);
     count('vein-there', taskTotal(tasks(['Great saphenous vein harvest'])), 10);
-    count('stent-collector', taskTotal(tasks(['Stent deployment', 'Target vessel cannulation and bridging stent'])), 50);
+    count('stent-collector', taskTotal(stents), 50);
     const hybrid = approach(/hybrid/i);
     if (hybrid) add('best-of-both-worlds', f.approachesUsed.has(hybrid));
     add('zone-defence', casesWith(procs(['REBOA'])) > 0);
