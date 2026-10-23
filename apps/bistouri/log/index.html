@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0f766e" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1312" media="(prefers-color-scheme: dark)">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Bistouri case log for McGill surgical residents. No patient identifiers are stored.">
+  <title>Bistouri</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="styles.css">
+  <!-- supabase-js (pinned UMD build: one file the service worker keeps for offline use). Exposes window.supabase. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div class="boot" role="status">Loading Bistouri…</div>
+  </div>
+  <div id="overlays"></div>
+  <noscript>
+    <p class="boot">Bistouri needs JavaScript. Please enable it and reload.</p>
+  </noscript>
+</body>
+</html>
