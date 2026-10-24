@@ -24,7 +24,7 @@
       "disclaimerAck": "I understand",
       "disclaimerScreenNote": "Every recovery is different, and your care team's plan always comes first. This page describes what often happens — not what will happen to you.",
       "importantTitle": "Important information",
-      "importantLink": "Read the full notice",
+      "importantLink": "Full notice and sources",
       "reviewedNote": "Content last reviewed: September 2026",
       "contactTeam": "Contact your care team",
       "contactTeamNone": "You have not saved your care team's number yet. Add it on the Prepare tab and it will be one tap away from every screen. It is stored only on this device.",
@@ -103,6 +103,19 @@
         "recovery": "6 to 8 weeks at home",
         "symbol": "heart.circle",
         "category": "open",
+        "sources": [
+          "g-revasc-2021",
+          "p-cabg",
+          "p-cabg-discharge",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "A new route around a blockage",
@@ -278,6 +291,20 @@
         "recovery": "6 to 8 weeks at home",
         "symbol": "arrow.triangle.2.circlepath.circle",
         "category": "open",
+        "sources": [
+          "g-valve-2020",
+          "g-valve-esc-2025",
+          "p-valve",
+          "p-valve-discharge",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Restoring the flow through your valve",
@@ -465,6 +492,14 @@
         "recovery": "3 to 4 weeks at home",
         "symbol": "heart.text.square",
         "category": "mini",
+        "sources": [
+          "g-revasc-2021",
+          "p-midcab",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "g-ccs-driving-2023",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "A bypass through a small opening",
@@ -642,6 +677,16 @@
         "recovery": "4 to 6 weeks at home",
         "symbol": "arrow.triangle.branch",
         "category": "mini",
+        "sources": [
+          "g-valve-2020",
+          "g-valve-esc-2025",
+          "p-mivalve",
+          "p-valve-discharge",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "g-ccs-driving-2023",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Valve surgery through a small side incision",
@@ -826,6 +871,15 @@
         "recovery": "2 to 3 weeks at home",
         "symbol": "shield.lefthalf.filled",
         "category": "mini",
+        "sources": [
+          "g-af-2023",
+          "t-laaos3-2021",
+          "p-af-nhlbi",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "g-ccs-driving-2023",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Closing a small pouch to lower stroke risk",
@@ -998,6 +1052,19 @@
         "recovery": "6 to 8 weeks at home",
         "symbol": "arrow.up.heart",
         "category": "open",
+        "sources": [
+          "g-aorta-2022",
+          "p-aorta",
+          "p-aorta-nhlbi",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Rebuilding the main artery",
@@ -1186,6 +1253,19 @@
         "symbol": "bolt.heart",
         "category": "open",
         "pathway": "extended",
+        "sources": [
+          "g-aorta-2022",
+          "p-dissection",
+          "p-aorta",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "An urgent repair",
@@ -1375,6 +1455,19 @@
         "recovery": "4 to 6 weeks at home",
         "symbol": "circle.grid.cross",
         "category": "open",
+        "sources": [
+          "g-achd-2025",
+          "p-congenital",
+          "p-asd",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Closing a hole in the heart",
@@ -1550,6 +1643,19 @@
         "recovery": "6 to 8 weeks at home",
         "symbol": "waveform.path.ecg",
         "category": "open",
+        "sources": [
+          "g-af-2023",
+          "p-af-surgery",
+          "p-af-nhlbi",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Restoring a steady rhythm",
@@ -1729,6 +1835,18 @@
         "recovery": "6 to 8 weeks at home",
         "symbol": "scissors",
         "category": "open",
+        "sources": [
+          "g-hcm-2024",
+          "p-hcm",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Making room for blood to leave the heart",
@@ -1905,6 +2023,18 @@
         "symbol": "arrow.triangle.2.circlepath",
         "category": "open",
         "pathway": "prolonged",
+        "sources": [
+          "g-transplant-2023",
+          "p-transplant",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "A new, healthy heart",
@@ -2091,6 +2221,18 @@
         "symbol": "bolt.heart.fill",
         "category": "open",
         "pathway": "prolonged",
+        "sources": [
+          "g-mcs-2023",
+          "p-lvad",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "A pump that helps your heart",
@@ -2276,6 +2418,18 @@
         "recovery": "6 to 8 weeks at home",
         "symbol": "circle.circle",
         "category": "open",
+        "sources": [
+          "g-pericard-2025",
+          "p-pericarditis",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Freeing the heart to move",
@@ -2989,6 +3143,399 @@
       "staleOverride": "You set your stage yourself {n} days ago. Is it still where you are?",
       "staleKeep": "Yes, still right",
       "staleAuto": "Follow my surgery date"
+    },
+    "sources": {
+      "title": "Sources",
+      "intro": "The information in this app is general patient education. It is drawn from the published clinical practice guidelines and the patient resources listed below. Times given — how long an operation takes, a hospital stay, a recovery — are typical ranges, not predictions, and your own care team's plan always comes first. Links open in your web browser.",
+      "sectionTitle": "Sources for this page",
+      "allLink": "All sources",
+      "calcTitle": "How the app uses your surgery date",
+      "calcBody": "The app does no medical calculation. If you enter a surgery date, it only counts calendar days from it: the day of surgery is day 0, days 1 to 6 fall in week 1 of recovery, days 7 to 13 in week 2, and so on. Before surgery, it counts the days remaining. That count is then placed on the typical timeline of the guide you bookmarked — the hospital stages and recovery weeks, which come from the sources on this page. It is not a prediction of your own recovery, and you can set your stage yourself on My path.",
+      "groups": [
+        {
+          "title": "Clinical practice guidelines and studies",
+          "ids": [
+            "g-revasc-2021",
+            "g-valve-2020",
+            "g-valve-esc-2025",
+            "g-aorta-2022",
+            "g-af-2023",
+            "t-laaos3-2021",
+            "g-hcm-2024",
+            "g-achd-2025",
+            "g-pericard-2025",
+            "g-transplant-2023",
+            "g-mcs-2023",
+            "g-eras-2019",
+            "g-eras-sts-2024",
+            "g-ccs-driving-2023",
+            "r-sternotomy-2019",
+            "t-smart-2018",
+            "s-sex-2012",
+            "s-rehab-2024",
+            "s-depression-2008"
+          ]
+        },
+        {
+          "title": "Patient information",
+          "ids": [
+            "p-cabg",
+            "p-cabg-discharge",
+            "p-valve",
+            "p-valve-discharge",
+            "p-midcab",
+            "p-mivalve",
+            "p-af-surgery",
+            "p-af-nhlbi",
+            "p-aorta",
+            "p-aorta-nhlbi",
+            "p-dissection",
+            "p-congenital",
+            "p-asd",
+            "p-hcm",
+            "p-transplant",
+            "p-lvad",
+            "p-pericarditis",
+            "p-waiting",
+            "p-prep-nhlbi",
+            "p-smoking",
+            "p-recovery",
+            "p-coming-home",
+            "p-intimacy",
+            "p-rehab",
+            "p-emergency",
+            "p-stroke",
+            "p-wound",
+            "p-dvt",
+            "p-hf-weight",
+            "p-depression"
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": "g-revasc-2021",
+          "title": "2021 ACC/AHA/SCAI Guideline for Coronary Artery Revascularization",
+          "publisher": "Lawton JS et al. Circulation 2022;145:e18–e114",
+          "url": "https://doi.org/10.1161/CIR.0000000000001038"
+        },
+        {
+          "id": "g-valve-2020",
+          "title": "2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease",
+          "publisher": "Otto CM et al. Circulation 2021;143:e72–e227",
+          "url": "https://doi.org/10.1161/CIR.0000000000000923"
+        },
+        {
+          "id": "g-valve-esc-2025",
+          "title": "2025 ESC/EACTS Guidelines for the management of valvular heart disease",
+          "publisher": "Praz F et al. Eur Heart J 2025;46:4635–4736",
+          "url": "https://doi.org/10.1093/eurheartj/ehaf194"
+        },
+        {
+          "id": "g-aorta-2022",
+          "title": "2022 ACC/AHA Guideline for the Diagnosis and Management of Aortic Disease",
+          "publisher": "Isselbacher EM et al. Circulation 2022;146:e334–e482",
+          "url": "https://doi.org/10.1161/CIR.0000000000001106"
+        },
+        {
+          "id": "g-af-2023",
+          "title": "2023 ACC/AHA/ACCP/HRS Guideline for the Diagnosis and Management of Atrial Fibrillation",
+          "publisher": "Joglar JA et al. Circulation 2024;149:e1–e156",
+          "url": "https://doi.org/10.1161/CIR.0000000000001193"
+        },
+        {
+          "id": "t-laaos3-2021",
+          "title": "Left Atrial Appendage Occlusion during Cardiac Surgery to Prevent Stroke (LAAOS III)",
+          "publisher": "Whitlock RP et al. N Engl J Med 2021;384:2081–2091",
+          "url": "https://doi.org/10.1056/NEJMoa2101897"
+        },
+        {
+          "id": "g-hcm-2024",
+          "title": "2024 AHA/ACC/AMSSM/HRS/PACES/SCMR Guideline for the Management of Hypertrophic Cardiomyopathy",
+          "publisher": "Ommen SR et al. Circulation 2024;149:e1239–e1311",
+          "url": "https://doi.org/10.1161/CIR.0000000000001250"
+        },
+        {
+          "id": "g-achd-2025",
+          "title": "2025 ACC/AHA/HRS/ISACHD/SCAI Guideline for the Management of Adults With Congenital Heart Disease",
+          "publisher": "Gurvitz M, Krieger EV et al. Circulation 2026;153:e115–e251",
+          "url": "https://doi.org/10.1161/CIR.0000000000001402"
+        },
+        {
+          "id": "g-pericard-2025",
+          "title": "2025 ESC Guidelines for the management of myocarditis and pericarditis",
+          "publisher": "Schulz-Menger J et al. Eur Heart J 2025;46:3952–4041",
+          "url": "https://doi.org/10.1093/eurheartj/ehaf192"
+        },
+        {
+          "id": "g-transplant-2023",
+          "title": "The ISHLT Guidelines for the Care of Heart Transplant Recipients",
+          "publisher": "Velleca A et al. J Heart Lung Transplant 2023;42:e1–e141",
+          "url": "https://doi.org/10.1016/j.healun.2022.10.015"
+        },
+        {
+          "id": "g-mcs-2023",
+          "title": "The 2023 ISHLT Guidelines for Mechanical Circulatory Support: A 10-Year Update",
+          "publisher": "Saeed D et al. J Heart Lung Transplant 2023;42:e1–e222",
+          "url": "https://doi.org/10.1016/j.healun.2022.12.004"
+        },
+        {
+          "id": "g-eras-2019",
+          "title": "Guidelines for Perioperative Care in Cardiac Surgery: Enhanced Recovery After Surgery Society Recommendations",
+          "publisher": "Engelman DT et al. JAMA Surg 2019;154:755–766",
+          "url": "https://doi.org/10.1001/jamasurg.2019.1153"
+        },
+        {
+          "id": "g-eras-sts-2024",
+          "title": "Perioperative Care in Cardiac Surgery: A Joint Consensus Statement by the ERAS Cardiac Society, ERAS International Society, and The Society of Thoracic Surgeons",
+          "publisher": "Grant MC et al. Ann Thorac Surg 2024;117:669–689",
+          "url": "https://doi.org/10.1016/j.athoracsur.2023.12.006"
+        },
+        {
+          "id": "g-ccs-driving-2023",
+          "title": "Canadian Cardiovascular Society 2023 Guidelines on the Fitness to Drive",
+          "publisher": "Guerra PG et al. Can J Cardiol 2024;40:500–523",
+          "url": "https://doi.org/10.1016/j.cjca.2023.09.033"
+        },
+        {
+          "id": "r-sternotomy-2019",
+          "title": "An Evidence-Based Perspective on Movement and Activity Following Median Sternotomy",
+          "publisher": "El-Ansary D et al. Phys Ther 2019;99:1587–1601",
+          "url": "https://doi.org/10.1093/ptj/pzz126"
+        },
+        {
+          "id": "t-smart-2018",
+          "title": "Standard restrictive sternal precautions and modified sternal precautions had similar effects in people after cardiac surgery via median sternotomy (SMART trial)",
+          "publisher": "Katijjahbe MA et al. J Physiother 2018;64:97–106",
+          "url": "https://doi.org/10.1016/j.jphys.2018.02.013"
+        },
+        {
+          "id": "s-sex-2012",
+          "title": "Sexual Activity and Cardiovascular Disease: A Scientific Statement From the American Heart Association",
+          "publisher": "Levine GN et al. Circulation 2012;125:1058–1072",
+          "url": "https://doi.org/10.1161/CIR.0b013e3182447787"
+        },
+        {
+          "id": "s-rehab-2024",
+          "title": "Core Components of Cardiac Rehabilitation Programs: 2024 Update",
+          "publisher": "Brown TM et al. Circulation 2024;150:e328–e347",
+          "url": "https://doi.org/10.1161/CIR.0000000000001289"
+        },
+        {
+          "id": "s-depression-2008",
+          "title": "Depression and Coronary Heart Disease: Recommendations for Screening, Referral, and Treatment",
+          "publisher": "Lichtman JH et al. Circulation 2008;118:1768–1775",
+          "url": "https://doi.org/10.1161/CIRCULATIONAHA.108.190769"
+        },
+        {
+          "id": "p-cabg",
+          "title": "Coronary artery bypass surgery",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/treatments/surgery-and-other-procedures/coronary-artery-bypass-surgery"
+        },
+        {
+          "id": "p-cabg-discharge",
+          "title": "Heart bypass surgery - discharge",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/patientinstructions/000102.htm"
+        },
+        {
+          "id": "p-valve",
+          "title": "Heart valve surgery",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/treatments/surgery-and-other-procedures/heart-valve-surgery"
+        },
+        {
+          "id": "p-valve-discharge",
+          "title": "Heart valve surgery - discharge",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/patientinstructions/000291.htm"
+        },
+        {
+          "id": "p-midcab",
+          "title": "Minimally invasive coronary artery bypass grafting surgery",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/test-procedure/minimally-invasive-coronary-artery-bypass-grafting-surgery"
+        },
+        {
+          "id": "p-mivalve",
+          "title": "Minimally invasive heart valve surgery",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/test-procedure/minimally-invasive-heart-valve-surgery"
+        },
+        {
+          "id": "p-af-surgery",
+          "title": "Ablation (including the Cox-Maze procedure)",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/treatments/surgery-and-other-procedures/ablation"
+        },
+        {
+          "id": "p-af-nhlbi",
+          "title": "Atrial fibrillation - Treatment",
+          "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+          "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/treatment"
+        },
+        {
+          "id": "p-aorta",
+          "title": "Thoracic aortic diseases",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/heart-condition/thoracic-aortic-diseases"
+        },
+        {
+          "id": "p-aorta-nhlbi",
+          "title": "Aortic aneurysm - Treatment",
+          "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+          "url": "https://www.nhlbi.nih.gov/health/aortic-aneurysm/treatment"
+        },
+        {
+          "id": "p-dissection",
+          "title": "Aortic dissection",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/article/000181.htm"
+        },
+        {
+          "id": "p-congenital",
+          "title": "Adult congenital heart defects",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/heart-condition/adult-congenital-heart-defects"
+        },
+        {
+          "id": "p-asd",
+          "title": "Atrial septal defect (ASD)",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/article/000157.htm"
+        },
+        {
+          "id": "p-hcm",
+          "title": "Cardiomyopathy",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/heart-condition/cardiomyopathy"
+        },
+        {
+          "id": "p-transplant",
+          "title": "Heart transplant: patient guide",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/patients-and-visitors/tools-and-resources/patient-guides/heart-transplant"
+        },
+        {
+          "id": "p-lvad",
+          "title": "Left ventricular assist device (LVAD): patient guide",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/patients-visitors/tools-and-resources/patient-guides/left-ventricular-assist-device-lvad"
+        },
+        {
+          "id": "p-pericarditis",
+          "title": "Pericarditis - constrictive",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/article/001103.htm"
+        },
+        {
+          "id": "p-waiting",
+          "title": "Waiting for cardiac surgery",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/patients-and-visitors/tools-and-resources/patient-guides/waiting-cardiac-surgery"
+        },
+        {
+          "id": "p-prep-nhlbi",
+          "title": "Heart surgery - Preparing for surgery",
+          "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+          "url": "https://www.nhlbi.nih.gov/health/heart-surgery/preparing"
+        },
+        {
+          "id": "p-smoking",
+          "title": "Smoking and surgery",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/patientinstructions/000437.htm"
+        },
+        {
+          "id": "p-recovery",
+          "title": "Recovering from cardiac surgery",
+          "publisher": "University of Ottawa Heart Institute",
+          "url": "https://www.ottawaheart.ca/patients-and-visitors/tools-and-resources/patient-guides/recovering-cardiac-surgery"
+        },
+        {
+          "id": "p-coming-home",
+          "title": "Coming home",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/recovery-and-support/coming-home"
+        },
+        {
+          "id": "p-intimacy",
+          "title": "Sex and intimacy",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/recovery-and-support/relationships/sex-and-intimacy"
+        },
+        {
+          "id": "p-rehab",
+          "title": "Cardiac rehabilitation",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/recovery-and-support/cardiac-rehabilitation"
+        },
+        {
+          "id": "p-emergency",
+          "title": "Emergency signs",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/emergency-signs"
+        },
+        {
+          "id": "p-stroke",
+          "title": "Signs of stroke (FAST)",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/stroke/signs-of-stroke"
+        },
+        {
+          "id": "p-wound",
+          "title": "Surgical wound infection - treatment",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/article/007645.htm"
+        },
+        {
+          "id": "p-dvt",
+          "title": "Deep vein thrombosis",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/article/000156.htm"
+        },
+        {
+          "id": "p-hf-weight",
+          "title": "Heart failure - home monitoring",
+          "publisher": "MedlinePlus, U.S. National Library of Medicine",
+          "url": "https://medlineplus.gov/ency/patientinstructions/000113.htm"
+        },
+        {
+          "id": "p-depression",
+          "title": "Recognizing and dealing with depression",
+          "publisher": "Heart & Stroke Foundation of Canada",
+          "url": "https://www.heartandstroke.ca/heart-disease/recovery-and-support/emotions-and-feelings/depression"
+        }
+      ],
+      "help": [
+        "p-emergency",
+        "p-stroke",
+        "p-wound",
+        "p-dvt",
+        "p-hf-weight",
+        "p-depression",
+        "s-depression-2008",
+        "p-cabg-discharge",
+        "p-valve-discharge"
+      ],
+      "path": [
+        "g-eras-sts-2024",
+        "g-eras-2019",
+        "p-recovery",
+        "p-coming-home",
+        "p-rehab",
+        "s-rehab-2024",
+        "g-transplant-2023",
+        "g-mcs-2023"
+      ],
+      "prepare": [
+        "g-eras-sts-2024",
+        "g-eras-2019",
+        "p-waiting",
+        "p-prep-nhlbi",
+        "p-smoking"
+      ]
     }
   },
   "fr": {
@@ -3016,7 +3563,7 @@
       "disclaimerAck": "Je comprends",
       "disclaimerScreenNote": "Chaque convalescence est différente, et le plan de votre équipe de soins passe toujours en premier. Cette page décrit ce qui se passe souvent — pas ce qui vous arrivera.",
       "importantTitle": "Renseignements importants",
-      "importantLink": "Lire l'avis complet",
+      "importantLink": "Avis complet et sources",
       "reviewedNote": "Contenu révisé pour la dernière fois : septembre 2026",
       "contactTeam": "Contacter votre équipe de soins",
       "contactTeamNone": "Vous n'avez pas encore enregistré le numéro de votre équipe de soins. Ajoutez-le dans l'onglet Préparer et il sera accessible d'un seul geste depuis chaque écran. Il est conservé uniquement sur cet appareil.",
@@ -3095,6 +3642,19 @@
         "recovery": "6 à 8 semaines à la maison",
         "symbol": "heart.circle",
         "category": "open",
+        "sources": [
+          "g-revasc-2021",
+          "p-cabg",
+          "p-cabg-discharge",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Une nouvelle voie pour contourner un blocage",
@@ -3270,6 +3830,20 @@
         "recovery": "6 à 8 semaines à la maison",
         "symbol": "arrow.triangle.2.circlepath.circle",
         "category": "open",
+        "sources": [
+          "g-valve-2020",
+          "g-valve-esc-2025",
+          "p-valve",
+          "p-valve-discharge",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Rétablir la circulation à travers votre valve",
@@ -3457,6 +4031,14 @@
         "recovery": "3 à 4 semaines à la maison",
         "symbol": "heart.text.square",
         "category": "mini",
+        "sources": [
+          "g-revasc-2021",
+          "p-midcab",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "g-ccs-driving-2023",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Un pontage par une petite ouverture",
@@ -3634,6 +4216,16 @@
         "recovery": "4 à 6 semaines à la maison",
         "symbol": "arrow.triangle.branch",
         "category": "mini",
+        "sources": [
+          "g-valve-2020",
+          "g-valve-esc-2025",
+          "p-mivalve",
+          "p-valve-discharge",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "g-ccs-driving-2023",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Chirurgie valvulaire par une petite incision latérale",
@@ -3818,6 +4410,15 @@
         "recovery": "2 à 3 semaines à la maison",
         "symbol": "shield.lefthalf.filled",
         "category": "mini",
+        "sources": [
+          "g-af-2023",
+          "t-laaos3-2021",
+          "p-af-nhlbi",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "g-ccs-driving-2023",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Fermer une petite poche pour réduire le risque d'AVC",
@@ -3990,6 +4591,19 @@
         "recovery": "6 à 8 semaines à la maison",
         "symbol": "arrow.up.heart",
         "category": "open",
+        "sources": [
+          "g-aorta-2022",
+          "p-aorta",
+          "p-aorta-nhlbi",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Reconstruire l'artère principale",
@@ -4178,6 +4792,19 @@
         "symbol": "bolt.heart",
         "category": "open",
         "pathway": "extended",
+        "sources": [
+          "g-aorta-2022",
+          "p-dissection",
+          "p-aorta",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Une réparation urgente",
@@ -4367,6 +4994,19 @@
         "recovery": "4 à 6 semaines à la maison",
         "symbol": "circle.grid.cross",
         "category": "open",
+        "sources": [
+          "g-achd-2025",
+          "p-congenital",
+          "p-asd",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Fermer un trou dans le cœur",
@@ -4542,6 +5182,19 @@
         "recovery": "6 à 8 semaines à la maison",
         "symbol": "waveform.path.ecg",
         "category": "open",
+        "sources": [
+          "g-af-2023",
+          "p-af-surgery",
+          "p-af-nhlbi",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Rétablir un rythme régulier",
@@ -4721,6 +5374,18 @@
         "recovery": "6 à 8 semaines à la maison",
         "symbol": "scissors",
         "category": "open",
+        "sources": [
+          "g-hcm-2024",
+          "p-hcm",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Dégager la sortie du sang hors du cœur",
@@ -4897,6 +5562,18 @@
         "symbol": "arrow.triangle.2.circlepath",
         "category": "open",
         "pathway": "prolonged",
+        "sources": [
+          "g-transplant-2023",
+          "p-transplant",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Un cœur neuf et sain",
@@ -5083,6 +5760,18 @@
         "symbol": "bolt.heart.fill",
         "category": "open",
         "pathway": "prolonged",
+        "sources": [
+          "g-mcs-2023",
+          "p-lvad",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Une pompe qui aide votre cœur",
@@ -5268,6 +5957,18 @@
         "recovery": "6 à 8 semaines à la maison",
         "symbol": "circle.circle",
         "category": "open",
+        "sources": [
+          "g-pericard-2025",
+          "p-pericarditis",
+          "g-eras-sts-2024",
+          "p-recovery",
+          "r-sternotomy-2019",
+          "t-smart-2018",
+          "g-ccs-driving-2023",
+          "s-sex-2012",
+          "p-intimacy",
+          "p-rehab"
+        ],
         "detail": {
           "what": {
             "heading": "Libérer le mouvement du cœur",
@@ -5981,6 +6682,399 @@
       "staleOverride": "Vous avez choisi votre étape vous-même il y a {n} jours. Est-ce toujours le cas ?",
       "staleKeep": "Oui, toujours",
       "staleAuto": "Suivre ma date de chirurgie"
+    },
+    "sources": {
+      "title": "Sources",
+      "intro": "L'information de cette application est de l'éducation générale pour les patients. Elle s'appuie sur les guides de pratique clinique publiés et sur les ressources pour les patients ci-dessous. Les durées indiquées — celle d'une opération, d'un séjour à l'hôpital, d'une convalescence — sont des fourchettes habituelles, pas des prédictions, et le plan de votre propre équipe de soins passe toujours en premier. Les liens s'ouvrent dans votre navigateur. Certaines sources sont en anglais.",
+      "sectionTitle": "Sources de cette page",
+      "allLink": "Toutes les sources",
+      "calcTitle": "Comment l'application utilise votre date de chirurgie",
+      "calcBody": "L'application ne fait aucun calcul médical. Si vous entrez une date de chirurgie, elle compte seulement les jours du calendrier à partir de cette date : le jour de l'opération est le jour 0, les jours 1 à 6 correspondent à la semaine 1 de la convalescence, les jours 7 à 13 à la semaine 2, et ainsi de suite. Avant l'opération, elle compte les jours qui restent. Ce compte est ensuite placé sur le parcours habituel du guide que vous avez mis en signet — les étapes à l'hôpital et les semaines de convalescence, tirées des sources de cette page. Ce n'est pas une prédiction de votre propre rétablissement, et vous pouvez indiquer vous-même votre étape dans Mon parcours.",
+      "groups": [
+        {
+          "title": "Guides de pratique clinique et études",
+          "ids": [
+            "g-revasc-2021",
+            "g-valve-2020",
+            "g-valve-esc-2025",
+            "g-aorta-2022",
+            "g-af-2023",
+            "t-laaos3-2021",
+            "g-hcm-2024",
+            "g-achd-2025",
+            "g-pericard-2025",
+            "g-transplant-2023",
+            "g-mcs-2023",
+            "g-eras-2019",
+            "g-eras-sts-2024",
+            "g-ccs-driving-2023",
+            "r-sternotomy-2019",
+            "t-smart-2018",
+            "s-sex-2012",
+            "s-rehab-2024",
+            "s-depression-2008"
+          ]
+        },
+        {
+          "title": "Information pour les patients",
+          "ids": [
+            "p-cabg",
+            "p-cabg-discharge",
+            "p-valve",
+            "p-valve-discharge",
+            "p-midcab",
+            "p-mivalve",
+            "p-af-surgery",
+            "p-af-nhlbi",
+            "p-aorta",
+            "p-aorta-nhlbi",
+            "p-dissection",
+            "p-congenital",
+            "p-asd",
+            "p-hcm",
+            "p-transplant",
+            "p-lvad",
+            "p-pericarditis",
+            "p-waiting",
+            "p-prep-nhlbi",
+            "p-smoking",
+            "p-recovery",
+            "p-coming-home",
+            "p-intimacy",
+            "p-rehab",
+            "p-emergency",
+            "p-stroke",
+            "p-wound",
+            "p-dvt",
+            "p-hf-weight",
+            "p-depression"
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": "g-revasc-2021",
+          "title": "2021 ACC/AHA/SCAI Guideline for Coronary Artery Revascularization",
+          "publisher": "Lawton JS et al. Circulation 2022;145:e18–e114 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000001038"
+        },
+        {
+          "id": "g-valve-2020",
+          "title": "2020 ACC/AHA Guideline for the Management of Patients With Valvular Heart Disease",
+          "publisher": "Otto CM et al. Circulation 2021;143:e72–e227 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000000923"
+        },
+        {
+          "id": "g-valve-esc-2025",
+          "title": "2025 ESC/EACTS Guidelines for the management of valvular heart disease",
+          "publisher": "Praz F et al. Eur Heart J 2025;46:4635–4736 — en anglais",
+          "url": "https://doi.org/10.1093/eurheartj/ehaf194"
+        },
+        {
+          "id": "g-aorta-2022",
+          "title": "2022 ACC/AHA Guideline for the Diagnosis and Management of Aortic Disease",
+          "publisher": "Isselbacher EM et al. Circulation 2022;146:e334–e482 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000001106"
+        },
+        {
+          "id": "g-af-2023",
+          "title": "2023 ACC/AHA/ACCP/HRS Guideline for the Diagnosis and Management of Atrial Fibrillation",
+          "publisher": "Joglar JA et al. Circulation 2024;149:e1–e156 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000001193"
+        },
+        {
+          "id": "t-laaos3-2021",
+          "title": "Left Atrial Appendage Occlusion during Cardiac Surgery to Prevent Stroke (LAAOS III)",
+          "publisher": "Whitlock RP et al. N Engl J Med 2021;384:2081–2091 — en anglais",
+          "url": "https://doi.org/10.1056/NEJMoa2101897"
+        },
+        {
+          "id": "g-hcm-2024",
+          "title": "2024 AHA/ACC/AMSSM/HRS/PACES/SCMR Guideline for the Management of Hypertrophic Cardiomyopathy",
+          "publisher": "Ommen SR et al. Circulation 2024;149:e1239–e1311 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000001250"
+        },
+        {
+          "id": "g-achd-2025",
+          "title": "2025 ACC/AHA/HRS/ISACHD/SCAI Guideline for the Management of Adults With Congenital Heart Disease",
+          "publisher": "Gurvitz M, Krieger EV et al. Circulation 2026;153:e115–e251 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000001402"
+        },
+        {
+          "id": "g-pericard-2025",
+          "title": "2025 ESC Guidelines for the management of myocarditis and pericarditis",
+          "publisher": "Schulz-Menger J et al. Eur Heart J 2025;46:3952–4041 — en anglais",
+          "url": "https://doi.org/10.1093/eurheartj/ehaf192"
+        },
+        {
+          "id": "g-transplant-2023",
+          "title": "The ISHLT Guidelines for the Care of Heart Transplant Recipients",
+          "publisher": "Velleca A et al. J Heart Lung Transplant 2023;42:e1–e141 — en anglais",
+          "url": "https://doi.org/10.1016/j.healun.2022.10.015"
+        },
+        {
+          "id": "g-mcs-2023",
+          "title": "The 2023 ISHLT Guidelines for Mechanical Circulatory Support: A 10-Year Update",
+          "publisher": "Saeed D et al. J Heart Lung Transplant 2023;42:e1–e222 — en anglais",
+          "url": "https://doi.org/10.1016/j.healun.2022.12.004"
+        },
+        {
+          "id": "g-eras-2019",
+          "title": "Guidelines for Perioperative Care in Cardiac Surgery: Enhanced Recovery After Surgery Society Recommendations",
+          "publisher": "Engelman DT et al. JAMA Surg 2019;154:755–766 — en anglais",
+          "url": "https://doi.org/10.1001/jamasurg.2019.1153"
+        },
+        {
+          "id": "g-eras-sts-2024",
+          "title": "Perioperative Care in Cardiac Surgery: A Joint Consensus Statement by the ERAS Cardiac Society, ERAS International Society, and The Society of Thoracic Surgeons",
+          "publisher": "Grant MC et al. Ann Thorac Surg 2024;117:669–689 — en anglais",
+          "url": "https://doi.org/10.1016/j.athoracsur.2023.12.006"
+        },
+        {
+          "id": "g-ccs-driving-2023",
+          "title": "Canadian Cardiovascular Society 2023 Guidelines on the Fitness to Drive",
+          "publisher": "Guerra PG et al. Can J Cardiol 2024;40:500–523 — en anglais",
+          "url": "https://doi.org/10.1016/j.cjca.2023.09.033"
+        },
+        {
+          "id": "r-sternotomy-2019",
+          "title": "An Evidence-Based Perspective on Movement and Activity Following Median Sternotomy",
+          "publisher": "El-Ansary D et al. Phys Ther 2019;99:1587–1601 — en anglais",
+          "url": "https://doi.org/10.1093/ptj/pzz126"
+        },
+        {
+          "id": "t-smart-2018",
+          "title": "Standard restrictive sternal precautions and modified sternal precautions had similar effects in people after cardiac surgery via median sternotomy (SMART trial)",
+          "publisher": "Katijjahbe MA et al. J Physiother 2018;64:97–106 — en anglais",
+          "url": "https://doi.org/10.1016/j.jphys.2018.02.013"
+        },
+        {
+          "id": "s-sex-2012",
+          "title": "Sexual Activity and Cardiovascular Disease: A Scientific Statement From the American Heart Association",
+          "publisher": "Levine GN et al. Circulation 2012;125:1058–1072 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0b013e3182447787"
+        },
+        {
+          "id": "s-rehab-2024",
+          "title": "Core Components of Cardiac Rehabilitation Programs: 2024 Update",
+          "publisher": "Brown TM et al. Circulation 2024;150:e328–e347 — en anglais",
+          "url": "https://doi.org/10.1161/CIR.0000000000001289"
+        },
+        {
+          "id": "s-depression-2008",
+          "title": "Depression and Coronary Heart Disease: Recommendations for Screening, Referral, and Treatment",
+          "publisher": "Lichtman JH et al. Circulation 2008;118:1768–1775 — en anglais",
+          "url": "https://doi.org/10.1161/CIRCULATIONAHA.108.190769"
+        },
+        {
+          "id": "p-cabg",
+          "title": "Pontage aortocoronarien (PAC)",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/traitements/chirurgies-et-autres-interventions/pontage-aortocoronarien"
+        },
+        {
+          "id": "p-cabg-discharge",
+          "title": "Heart bypass surgery - discharge",
+          "publisher": "MedlinePlus, National Library of Medicine (É.-U.) — en anglais",
+          "url": "https://medlineplus.gov/ency/patientinstructions/000102.htm"
+        },
+        {
+          "id": "p-valve",
+          "title": "Interventions valvulaires",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/traitements/chirurgies-et-autres-interventions/interventions-valvulaires"
+        },
+        {
+          "id": "p-valve-discharge",
+          "title": "Heart valve surgery - discharge",
+          "publisher": "MedlinePlus, National Library of Medicine (É.-U.) — en anglais",
+          "url": "https://medlineplus.gov/ency/patientinstructions/000291.htm"
+        },
+        {
+          "id": "p-midcab",
+          "title": "Pontage aortocoronarien à effraction minimale",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/examen-intervention/pontage-aortocoronarien-effraction-minimale"
+        },
+        {
+          "id": "p-mivalve",
+          "title": "Remplacement valvulaire à effraction minimale",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/examen-intervention/remplacement-valvulaire-effraction-minimale"
+        },
+        {
+          "id": "p-af-surgery",
+          "title": "Ablation (y compris l'intervention de Cox-Maze)",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/traitements/chirurgies-et-autres-interventions/ablation"
+        },
+        {
+          "id": "p-af-nhlbi",
+          "title": "Atrial fibrillation - Treatment",
+          "publisher": "National Heart, Lung, and Blood Institute (NIH, É.-U.) — en anglais",
+          "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/treatment"
+        },
+        {
+          "id": "p-aorta",
+          "title": "Maladies de l'aorte thoracique",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/maladie-du-c%C5%93ur/maladies-de-l-aorte-thoracique"
+        },
+        {
+          "id": "p-aorta-nhlbi",
+          "title": "Aortic aneurysm - Treatment",
+          "publisher": "National Heart, Lung, and Blood Institute (NIH, É.-U.) — en anglais",
+          "url": "https://www.nhlbi.nih.gov/health/aortic-aneurysm/treatment"
+        },
+        {
+          "id": "p-dissection",
+          "title": "Dissection aortique",
+          "publisher": "CHUV, Centre hospitalier universitaire vaudois",
+          "url": "https://www.chuv.ch/fr/cardiologie/car-home/patients-et-famille/maladies-traitees/affections-des-valves-et-vaisseaux/dissection-aortique"
+        },
+        {
+          "id": "p-congenital",
+          "title": "La cardiopathie congénitale de l'adulte",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/maladie-du-c%C5%93ur/la-cardiopathie-congenitale-de-ladulte"
+        },
+        {
+          "id": "p-asd",
+          "title": "Atrial septal defect (ASD)",
+          "publisher": "MedlinePlus, National Library of Medicine (É.-U.) — en anglais",
+          "url": "https://medlineplus.gov/ency/article/000157.htm"
+        },
+        {
+          "id": "p-hcm",
+          "title": "La cardiomyopathie",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/maladie-du-c%C5%93ur/la-cardiomyopathie"
+        },
+        {
+          "id": "p-transplant",
+          "title": "Transplantation cardiaque : guide à l'intention des patients",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/patients-et-visiteurs/outils-et-ressources/guides-lintention-des-patients/transplantation-cardiaque"
+        },
+        {
+          "id": "p-lvad",
+          "title": "Dispositif d'assistance ventriculaire gauche (DAVG) : guide à l'intention des patients",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/patients-et-visiteurs/outils-et-ressources/guides-l-intention-des-patients/dispositif-d-assistance-ventriculaire-gauche-davg"
+        },
+        {
+          "id": "p-pericarditis",
+          "title": "Pericarditis - constrictive",
+          "publisher": "MedlinePlus, National Library of Medicine (É.-U.) — en anglais",
+          "url": "https://medlineplus.gov/ency/article/001103.htm"
+        },
+        {
+          "id": "p-waiting",
+          "title": "En attente d'une intervention chirurgicale cardiaque",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/patients-et-visiteurs/outils-et-ressources/guides-l-intention-des-patients/en-attente-d-une-intervention-chirurgicale-cardiaque"
+        },
+        {
+          "id": "p-prep-nhlbi",
+          "title": "Heart surgery - Preparing for surgery",
+          "publisher": "National Heart, Lung, and Blood Institute (NIH, É.-U.) — en anglais",
+          "url": "https://www.nhlbi.nih.gov/health/heart-surgery/preparing"
+        },
+        {
+          "id": "p-smoking",
+          "title": "Cesser de fumer pour sa santé",
+          "publisher": "CHU de Québec – Université Laval",
+          "url": "https://www.chudequebec.ca/patient/conseils-sante/cesser-de-fumer-pour-sa-sante.aspx"
+        },
+        {
+          "id": "p-recovery",
+          "title": "Rétablissement à la suite d'une intervention chirurgicale cardiaque",
+          "publisher": "Institut de cardiologie de l'Université d'Ottawa",
+          "url": "https://www.ottawaheart.ca/fr/patients-et-visiteurs/outils-et-ressources/guides-l-intention-des-patients/retablissement-la-suite-d-une-intervention-chirurgicale-cardiaque"
+        },
+        {
+          "id": "p-coming-home",
+          "title": "Retourner chez soi",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/retablissement-et-soutien/retourner-chez-soi"
+        },
+        {
+          "id": "p-intimacy",
+          "title": "Sexualité et intimité",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/retablissement-et-soutien/relations/relations-sexuelles-et-intimite"
+        },
+        {
+          "id": "p-rehab",
+          "title": "Réadaptation cardiaque",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/retablissement-et-soutien/readaptation-cardiaque"
+        },
+        {
+          "id": "p-emergency",
+          "title": "Signes d'urgence",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/signes-d-urgence"
+        },
+        {
+          "id": "p-stroke",
+          "title": "Signes de l'AVC (VITE)",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/avc/signes-de-l-avc"
+        },
+        {
+          "id": "p-wound",
+          "title": "Surgical wound infection - treatment",
+          "publisher": "MedlinePlus, National Library of Medicine (É.-U.) — en anglais",
+          "url": "https://medlineplus.gov/ency/article/007645.htm"
+        },
+        {
+          "id": "p-dvt",
+          "title": "Deep vein thrombosis",
+          "publisher": "MedlinePlus, National Library of Medicine (É.-U.) — en anglais",
+          "url": "https://medlineplus.gov/ency/article/000156.htm"
+        },
+        {
+          "id": "p-hf-weight",
+          "title": "Insuffisance cardiaque",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/problemes-de-sante/insuffisance-cardiaque"
+        },
+        {
+          "id": "p-depression",
+          "title": "Reconnaître et gérer la dépression",
+          "publisher": "Cœur + AVC (Fondation des maladies du cœur et de l'AVC)",
+          "url": "https://www.coeuretavc.ca/maladies-du-coeur/retablissement-et-soutien/emotions-et-pensees/depression"
+        }
+      ],
+      "help": [
+        "p-emergency",
+        "p-stroke",
+        "p-wound",
+        "p-dvt",
+        "p-hf-weight",
+        "p-depression",
+        "s-depression-2008",
+        "p-cabg-discharge",
+        "p-valve-discharge"
+      ],
+      "path": [
+        "g-eras-sts-2024",
+        "g-eras-2019",
+        "p-recovery",
+        "p-coming-home",
+        "p-rehab",
+        "s-rehab-2024",
+        "g-transplant-2023",
+        "g-mcs-2023"
+      ],
+      "prepare": [
+        "g-eras-sts-2024",
+        "g-eras-2019",
+        "p-waiting",
+        "p-prep-nhlbi",
+        "p-smoking"
+      ]
     }
   },
   "contentVersion": 1

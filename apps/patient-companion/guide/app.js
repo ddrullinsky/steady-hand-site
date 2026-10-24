@@ -6,7 +6,7 @@
 // Only the language and the disclaimer acknowledgement are saved (localStorage);
 // the page makes no requests beyond its own files.
 
-import * as L from "./logic.js?v=33b6ab48ec";
+import * as L from "./logic.js?v=db0a874418";
 
 // ---------------------------------------------------------------- storage
 // Keys match the app's UserDefaults keys, so the two read the same.
@@ -18,7 +18,7 @@ const K = {
 // The App Store page. Empty until the app is live: the "Get the app" cards then
 // say "coming soon" instead of linking. Format: https://apps.apple.com/app/id<Apple ID>
 // (the Apple ID is on App Store Connect → App Information).
-const APP_STORE_URL = "";
+const APP_STORE_URL = "https://apps.apple.com/app/id6791398154";
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
@@ -410,7 +410,7 @@ document.addEventListener("click", (e) => {
 // ---------------------------------------------------------------- boot
 async function boot() {
   try {
-    const res = await fetch("content.json?v=33b6ab48ec", { cache: "no-cache" });
+    const res = await fetch("content.json?v=db0a874418", { cache: "no-cache" });
     content = await res.json();
     if (!content.en || !content.fr) throw new Error("content");
   } catch {
