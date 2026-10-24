@@ -5,10 +5,10 @@
   --ink: #141a22;
   --muted: #5a6472;
   --rule: #dfe3e9;
-  --prolene: #2f4ca3;      /* the violet-blue of polypropylene suture */
-  --prolene-2: #5b74d6;
-  --prolene-soft: #e7ebf8;
-  --glow: rgba(47, 76, 163, 0.16);
+  --prolene: #1f6f78;      /* brand green, from the Steady Hand logo */
+  --prolene-2: #2f8f99;
+  --prolene-soft: #e2f0f1;
+  --glow: rgba(31, 111, 120, 0.16);
   --ok: #2c6e4f;
   --ok-soft: #e3f0e8;
   --shadow: 0 1px 2px rgba(20, 26, 34, .06), 0 8px 24px rgba(20, 26, 34, .07);
@@ -21,8 +21,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #0d1117; --surface: #151b24; --ink: #e8ebef; --muted: #9aa5b2;
-    --rule: #252d38; --prolene: #9db0f2; --prolene-2: #7f96ec; --prolene-soft: #1b2442;
-    --glow: rgba(127, 150, 236, 0.18); --ok: #7fc6a1; --ok-soft: #16281f;
+    --rule: #252d38; --prolene: #7fcbd1; --prolene-2: #5fb3ba; --prolene-soft: #12292c;
+    --glow: rgba(127, 203, 209, 0.18); --ok: #7fc6a1; --ok-soft: #16281f;
     --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
     --tile-shadow: 0 2px 4px rgba(0,0,0,.4), 0 14px 32px rgba(0,0,0,.5);
     color-scheme: dark;
@@ -30,8 +30,8 @@
 }
 :root[data-theme="dark"] {
   --paper: #0d1117; --surface: #151b24; --ink: #e8ebef; --muted: #9aa5b2;
-  --rule: #252d38; --prolene: #9db0f2; --prolene-2: #7f96ec; --prolene-soft: #1b2442;
-  --glow: rgba(127, 150, 236, 0.18); --ok: #7fc6a1; --ok-soft: #16281f;
+  --rule: #252d38; --prolene: #7fcbd1; --prolene-2: #5fb3ba; --prolene-soft: #12292c;
+  --glow: rgba(127, 203, 209, 0.18); --ok: #7fc6a1; --ok-soft: #16281f;
   --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
   --tile-shadow: 0 2px 4px rgba(0,0,0,.4), 0 14px 32px rgba(0,0,0,.5);
   color-scheme: dark;
