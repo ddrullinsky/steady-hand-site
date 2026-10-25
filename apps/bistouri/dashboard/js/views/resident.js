@@ -233,7 +233,7 @@ export function render(main, { args, rerender }) {
 /** Major and minor achievements, worked out from the resident's cases the way
  *  the app does. Dates come from the program feed (majors announced by name). */
 function achievementsPanel(uid, allCases, name) {
-  const all = residentAchievements(allCases);
+  const all = residentAchievements(allCases, state.config);
   const unlocked = new Map(state.achievements.filter((u) => u.user_id === uid && u.display_name)
     .map((u) => [u.achievement_id, u.unlocked_at]));
   const tierCount = (tier) => {

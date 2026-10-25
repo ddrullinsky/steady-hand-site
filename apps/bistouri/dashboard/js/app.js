@@ -11,6 +11,7 @@ import * as configure from './views/configure.js';
 import * as people from './views/people.js';
 import * as admin from './views/admin.js';
 import * as achievements from './views/achievements.js';
+import * as report from './views/report.js';
 
 const root = document.getElementById('app');
 const PROGRAM_KEY = 'bistouri.dashboard.program';
@@ -19,12 +20,13 @@ const NAV = [
   { id: 'overview', label: 'Overview' },
   { id: 'residents', label: 'Residents' },
   { id: 'compliance', label: 'Compliance' },
+  { id: 'report', label: 'Report' },
   { id: 'achievements', label: 'Achievements' },
   { id: 'configure', label: 'Configure' },
   { id: 'people', label: 'People' },
 ];
 
-const VIEWS = { overview, residents, resident, compliance, achievements, configure, people, admin };
+const VIEWS = { overview, residents, resident, compliance, report, achievements, configure, people, admin };
 
 let mainEl = null;
 let navEl = null;

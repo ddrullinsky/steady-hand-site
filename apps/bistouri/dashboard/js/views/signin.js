@@ -92,8 +92,69 @@ export function renderSignIn(root, initialError) {
   }
 
   const dev = isLocal ? devForm(setMsg) : null;
-  clear(root).append(card(body, msg, dev));
+  const request = h('p', { class: 'small muted', style: { margin: 0 } }, 'New to Bistouri? ',
+    h('button', { type: 'button', class: 'link', id: 'request-program', onclick: () => renderRequestProgram(root) }, 'Request it for your program'));
+  clear(root).append(card(body, msg, request, dev));
   stepEmail();
+}
+
+/** "Request a program": anyone can ask, no account needed (sign-in is limited to
+ *  McGill and invited emails). Admins approve on the Admin page, which creates the
+ *  program and invites the requester as its program director. */
+export function renderRequestProgram(root, { email = '', signedIn = false } = {}) {
+  const msg = h('p', { class: 'form-msg', role: 'alert' });
+  const field = (id, label, input, hint) => [h('label', { for: id }, label), input, hint ? h('div', { class: 'hint' }, hint) : null];
+  const input = (id, attrs = {}) => h('input', { id, type: 'text', required: true, ...attrs });
+  const name = input('req-name', { autocomplete: 'name', maxlength: '120' });
+  const mail = input('req-email', { type: 'email', autocomplete: 'email', maxlength: '254', value: email, readonly: signedIn && !!email });
+  const program = input('req-program', { placeholder: 'e.g. Orthopaedic Surgery', maxlength: '120' });
+  const institution = input('req-institution', { placeholder: 'e.g. McGill University', maxlength: '160' });
+  const residents = h('input', { id: 'req-residents', type: 'number', min: '1', max: '500', inputmode: 'numeric' });
+  const note = h('textarea', { id: 'req-message', rows: '3', maxlength: '2000', placeholder: 'Anything we should know: your rotation sites, when you would like to start…' });
+  const btn = h('button', { class: 'btn btn-primary btn-block', type: 'submit' }, 'Send request');
+  const back = signedIn
+    ? h('button', { type: 'button', class: 'link', onclick: () => renderNotDirector(root) }, 'Back')
+    : h('button', { type: 'button', class: 'link', onclick: () => renderSignIn(root) }, 'Back to sign in');
+
+  const form = h('form', {
+    class: 'stack',
+    onsubmit: async (e) => {
+      e.preventDefault();
+      btn.disabled = true; btn.textContent = 'Sending…';
+      msg.textContent = '';
+      const { error } = await sb.from('program_requests').insert({
+        email: mail.value.trim().toLowerCase(), full_name: name.value.trim(), program_name: program.value.trim(),
+        institution: institution.value.trim(), resident_count: residents.value ? Number(residents.value) : null,
+        message: note.value.trim() || null,
+      });
+      btn.disabled = false; btn.textContent = 'Send request';
+      if (error) {
+        msg.className = 'form-msg error';
+        msg.textContent = error.code === 'P0001' ? error.message
+          : error.code === '23514' ? 'Please check the fields: some are too short or too long.'
+            : 'Could not send your request. Please try again in a moment.';
+        return;
+      }
+      clear(body).append(h('h1', { class: 'auth-h1' }, 'Request sent'),
+        h('p', null, 'Thank you. We will review it and email ', h('strong', null, mail.value.trim().toLowerCase()),
+          ' once your program is set up. You will then sign in here with that address and find a starting set of lists to adjust.'),
+        back);
+    },
+  },
+  ...field('req-name', 'Your name', name),
+  ...field('req-email', 'Work email', mail, 'Your sign-in address once the program is approved.'),
+  ...field('req-program', 'Program', program),
+  ...field('req-institution', 'University', institution),
+  ...field('req-residents', 'Number of residents (optional)', residents),
+  ...field('req-message', 'Message (optional)', note),
+  btn);
+
+  const body = h('div', null,
+    h('h1', { class: 'auth-h1' }, 'Request Bistouri for your program'),
+    h('p', { class: 'muted', style: { marginBottom: '14px' } }, 'For program directors. We set up your program with a starting procedure list you can edit, and invite you as its director.'),
+    form);
+  clear(root).append(card(body, msg, back));
+  name.focus();
 }
 
 function devForm(setMsg) {
@@ -121,10 +182,14 @@ export function renderNotDirector(root) {
     h('h1', { class: 'auth-h1' }, 'This dashboard is for program directors'),
     h('p', null, isResident
       ? 'You are signed in as a resident. Log your cases in the Bistouri iPhone app: your progress, targets and milestones are all there.'
-      : 'Log your cases in the Bistouri iPhone app. If you direct a McGill surgical program and need access here, contact the Bistouri team.'),
+      : 'Log your cases in the Bistouri iPhone app. If you direct a surgical program, request it below, or ask the Bistouri team for access to one that already exists.'),
     h('p', { class: 'muted' }, 'Signed in as ', h('strong', null, state.profile?.email || state.session?.user?.email || ''), '.'),
     h('div', { class: 'row-between' },
-      h('a', { href: `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent('Bistouri dashboard access')}` }, 'Request PD access'),
+      h('button', {
+        type: 'button', class: 'link', id: 'request-program',
+        onclick: () => renderRequestProgram(root, { email: state.profile?.email || state.session?.user?.email || '', signedIn: true }),
+      }, 'Request a program'),
+      h('a', { href: `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent('Bistouri dashboard access')}` }, 'Ask for access to an existing one'),
       h('button', { class: 'btn', onclick: () => sb.auth.signOut() }, 'Sign out')),
   ));
 }

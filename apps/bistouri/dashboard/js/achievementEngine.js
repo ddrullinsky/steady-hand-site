@@ -1,7 +1,9 @@
 // Achievements, computed from a resident's cases the way the app does it
 // (AchievementEngine in ios/Bistouri/Achievements.swift). Keep the rules in step
 // with the app; texts come from the generated catalogue.
-import { state } from './api.js';
+// Shared by the dashboard and the web logger (log/shared/), so the program's
+// configuration is passed in: { categories, procedures, tasks, roles,
+// approaches, fields, targets }.
 import { byOrder } from './util.js';
 import { ACHIEVEMENTS } from './achievementCatalogue.js';
 
@@ -20,8 +22,7 @@ function localDayNo(ts) {
 }
 
 /** What the app sees: active rows only, in order. */
-function refData() {
-  const cfg = state.config;
+function refData(cfg) {
   const active = (rows) => rows.filter((r) => r.active !== false).sort(byOrder);
   const ref = {
     categories: active(cfg.categories), procedures: active(cfg.procedures), tasks: active(cfg.tasks),
@@ -34,16 +35,16 @@ function refData() {
 }
 
 /** The specialty whose achievements this program gets, matched like the rules below. */
-export function programSpecialty() {
-  const procs = state.config?.procedures ?? [];
+export function programSpecialty(config) {
+  const procs = config?.procedures ?? [];
   if (procs.some((p) => p.name.startsWith('CABGx'))) return 'cardiac';
   if (procs.some((p) => p.name === 'EVAR')) return 'vascular';
   return null;
 }
 
 /** The catalogue entries that apply to this program: general ones plus its specialty's. */
-export function programCatalogue() {
-  const specialty = programSpecialty();
+export function programCatalogue(config) {
+  const specialty = programSpecialty(config);
   return ACHIEVEMENTS.filter((a) => !a.specialty || a.specialty === specialty);
 }
 
@@ -155,8 +156,8 @@ function facts(cases, ref) {
 }
 
 /** Every achievement the resident can see in the app, with earned and progress. */
-export function residentAchievements(cases) {
-  const ref = refData();
+export function residentAchievements(cases, config) {
+  const ref = refData(config);
   const f = facts(cases, ref);
   const out = [];
   const add = (id, earned) => out.push({ ...CATALOGUE.get(id), id, earned: !!earned });
@@ -233,7 +234,8 @@ export function residentAchievements(cases) {
     const valves = procs(['Aortic valve repair', 'Aortic valve replacement', 'Aortic valve replacement after failed repair',
       'Aortic valve re-replacement', 'Mitral valve repair', 'Mitral valve replacement',
       'Mitral valve replacement after repair', 'Tricuspid valve repair', 'Tricuspid valve replacement',
-      'Pulmonic valve repair', 'Pulmonic valve replacement', 'Bentall', 'Ross procedure']);
+      'Pulmonic valve repair', 'Pulmonic valve replacement', 'Pulmonary valve replacement (ACHD)', 'Bentall',
+      'Ross procedure']);
     const distals = tasks(['Distal anastomosis']);
     count('licensed-plumber', casesWith(cabg, true), 1);
     count('valve-job', casesWith(valves, true), 1);

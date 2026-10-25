@@ -33,7 +33,7 @@ function who(u) {
 
 export function render(main, { rerender }) {
   const p = state.program;
-  const catalogue = programCatalogue();
+  const catalogue = programCatalogue(state.config);
   const MAJORS = catalogue.filter((a) => a.tier === 'major').map(toMajor);
   const unlocks = state.achievements.filter((u) => BY_ID.has(u.achievement_id));
   const t = today();
