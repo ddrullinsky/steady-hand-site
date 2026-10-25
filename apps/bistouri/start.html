@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Getting started: Bistouri</title>
+<meta name="description" content="Set up Bistouri on iPhone or Android and log your first surgical case in five minutes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="icon" href="../../favicon.svg?v=2" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css?v=8cdea569">
+<style>
+  .platforms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 4px 0 8px; max-width: 52em; }
+  .platform { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; background: var(--surface);
+    border: 1px solid var(--rule); border-radius: 20px; padding: 22px; box-shadow: var(--shadow); }
+  .platform .for { font: 500 0.7rem/1.3 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 6px; }
+  .platform h3 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 8px; }
+  .platform p { margin: 0 0 14px; color: var(--muted); font-size: 0.98rem; }
+  .platform .qr { width: 96px; height: 96px; background: #fff; border-radius: 12px; padding: 6px; border: 1px solid var(--rule); }
+  .doc ol.steps { list-style: none; padding-left: 0; }
+  .steps { counter-reset: step; max-width: 40em; margin: 0; padding: 0; list-style: none; }
+  .steps li { counter-increment: step; position: relative; padding: 0 0 18px 52px; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: -2px; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--prolene); color: var(--surface); font: 600 1rem/34px var(--display); text-align: center; }
+  .steps h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
+  .steps p { margin: 0; }
+  .doc .downloads { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; padding: 0; list-style: none; }
+  .doc .downloads li { margin: 0; }
+  .alert { border-left: 3px solid #e2674f; background: color-mix(in srgb, #e2674f 10%, var(--surface)); padding: 14px 18px; margin: 0 0 18px; }
+  kbd { font: 500 0.88em/1 var(--mono); background: var(--prolene-soft); color: var(--prolene); padding: 2px 6px; border-radius: 6px; }
+  @media (max-width: 720px) {
+    .platforms { grid-template-columns: 1fr; }
+    .platform .qr { display: none; }
+    .platform { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="mast"><a class="wordmark" href="../../index.html"><svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 38 A18 18 0 0 1 50 38 C51 42 53 46 58 46" style="color:var(--prolene)" stroke="currentColor"/><path d="M6 46 H58"/></svg>Steady Hand Software</a><nav aria-label="Site"><a href="../../index.html#apps">Apps</a><a href="../../index.html#about">About</a></nav></header>
+<div class="doc-head"><p class="app-name">Bistouri</p><h1>Getting started</h1><nav class="tabs" aria-label="Bistouri"><a href="start.html" aria-current="page">Getting started</a><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a></nav></div>
+
+<article class="doc">
+<p>Bistouri is a surgical case log for residents. Log an OR case in under 30 seconds, see where you stand against your program's targets, and know which EPAs to ask for before you leave the OR. Setup takes about five minutes.</p>
+</article>
+
+<h2 class="section-title" style="font-size:1.25rem">1. Get Bistouri on your phone</h2>
+<div class="platforms">
+  <section class="platform">
+    <div>
+      <p class="for">iPhone</p>
+      <h3>Install from the App Store</h3>
+      <p>Free, for iOS 17 or later. Search for “Bistouri” or use the button.</p>
+      <a class="chip store" href="https://apps.apple.com/ca/app/bistouri/id6817524582">Download on the App Store</a>
+    </div>
+    <img class="qr" src="guides/qr-app-store.svg" alt="QR code for Bistouri on the App Store">
+  </section>
+  <section class="platform">
+    <div>
+      <p class="for">Android</p>
+      <h3>Open Bistouri for the web</h3>
+      <p>Open it in <strong>Chrome</strong>, sign in, then tap <kbd>⋮</kbd> › <strong>Add to home screen</strong> › <strong>Install</strong>. It opens from its own icon like any app and works without signal.</p>
+      <a class="chip store" href="log/">Open Bistouri for the web</a>
+    </div>
+    <img class="qr" src="guides/qr-web.svg" alt="QR code for Bistouri for the web">
+  </section>
+</div>
+
+<article class="doc">
+<h2>2. Sign in and log your first case</h2>
+<ol class="steps">
+  <li><h3>Sign in with your email</h3><p>Enter your McGill address (or the one your program director invited) and tap <strong>Email me a code</strong>. Type in the 6-digit code from the email. There is no password.</p></li>
+  <li><h3>Check your program and PGY year</h3><p>If your program director invited you, your program and PGY year are already set. Otherwise, pick them. Add your name in Settings so your program director can follow your progress.</p></li>
+  <li><h3>Log a case</h3><p>On the <strong>Cases</strong> tab, tap <strong>+ Log case</strong>. Pick the site, the attending, your role and the procedure, tick the steps you did yourself, and tap <strong>Save case</strong>. Use + and − to count repeated steps.</p></li>
+  <li><h3>Request your EPAs</h3><p>After you save, Bistouri lists the EPAs that case could count toward, so you can send the request while the case is fresh.</p></li>
+</ol>
+
+<div class="alert"><strong>No patient identifiers, ever.</strong> Never enter a patient's name, MRN, health card number or date of birth in any field.</div>
+
+<h2>Tips</h2>
+<ul>
+  <li>Search procedures by name or short form, such as “CABGx3”, “EVAR” or “AVF”.</li>
+  <li><strong>Repeat</strong> starts a copy of your last case.</li>
+  <li>No signal in the OR? Log anyway. Cases sync when you're back online.</li>
+  <li>The <strong>Progress</strong> tab shows your totals against your program's minimums, plus your achievements.</li>
+  <li><strong>Settings › Export cases to Excel</strong> gives you your own copy at any time.</li>
+  <li>Same account on iPhone and the web. A new phone just needs you to sign in again.</li>
+</ul>
+
+<h2>Printable guides</h2>
+<p>Two-page PDFs to keep or share with your program.</p>
+<ul class="downloads">
+  <li><a class="chip" href="guides/Bistouri-vascular-guide.pdf">Vascular Surgery guide (PDF)</a></li>
+  <li><a class="chip" href="guides/Bistouri-iphone.pdf">iPhone guide (PDF)</a></li>
+  <li><a class="chip" href="guides/Bistouri-android.pdf">Android guide (PDF)</a></li>
+</ul>
+
+<h2>For program directors</h2>
+<p>The <a href="dashboard/">program dashboard</a> shows each resident's progress, logging activity and achievements, prints a program report for reviews, and lets you edit your procedure list, EPAs and targets, invite residents and export every case to Excel. Sign in with your institutional email. Running a program that isn't on Bistouri yet? Use <strong>Request it for your program</strong> on the dashboard's sign-in page.</p>
+
+<h2>Need help?</h2>
+<p>See the <a href="support.html">support page</a> for common questions, or email <a href="mailto:support@steadyhandsoftware.com">support@steadyhandsoftware.com</a>.</p>
+</article>
+<footer class="site"><span>© 2026 Steady Hand Software</span><span>Montréal, Québec</span></footer>
+</div>
+</body>
+</html>
