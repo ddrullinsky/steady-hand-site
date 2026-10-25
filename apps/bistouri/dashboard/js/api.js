@@ -59,7 +59,7 @@ export async function loadIdentity() {
   const [profiles, memberships, programs, sites] = await Promise.all([
     sb.from('profiles').select('id,email,full_name,is_admin').eq('id', uid),
     sb.from('program_members').select('program_id,role,pgy_year,active').eq('user_id', uid),
-    sb.from('programs').select('id,slug,name,name_fr,status,sort_order').order('sort_order').order('name'),
+    sb.from('programs').select('id,slug,name,name_fr,status,sort_order,hidden').order('sort_order').order('name'),
     sb.from('sites').select('*').order('sort_order'),
   ]);
   state.profile = check(profiles)[0] || { id: uid, email: state.session.user.email, is_admin: false };
