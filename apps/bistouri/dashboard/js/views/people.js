@@ -1,6 +1,6 @@
 // People: roster (PGY, role, active) and invitations.
 import { sb, state, loadMembers, loadInvitations, updateMember } from '../api.js';
-import { h, icon, toast, dialog, errorText, fmtDate, fmtNum, personName, pgyLabel, emptyState } from '../util.js';
+import { h, icon, toast, dialog, errorText, fmtDate, fmtNum, personName, pgyLabel, PGY_LEVELS, FELLOW, emptyState } from '../util.js';
 
 const ui = { inactive: true };
 const EMAIL_RE = /^[^\s@,;<>]+@[^\s@,;<>]+\.[a-z]{2,}$/i;
@@ -8,7 +8,7 @@ const EMAIL_RE = /^[^\s@,;<>]+@[^\s@,;<>]+\.[a-z]{2,}$/i;
 function pgySelect(value, onchange, label) {
   return h('select', { 'aria-label': label, onchange },
     h('option', { value: '' }, '—'),
-    [1, 2, 3, 4, 5, 6, 7, 8].map((n) => h('option', { value: String(n), selected: value === n }, `PGY-${n}`)));
+    PGY_LEVELS.map((n) => h('option', { value: String(n), selected: value === n }, pgyLabel(n))));
 }
 
 export function render(main, { rerender }) {
@@ -103,8 +103,7 @@ export function render(main, { rerender }) {
         h('td', null, h('input', { type: 'checkbox', checked: r.include, disabled: r.status !== 'new', 'aria-label': `Invite ${r.email}`,
           onchange: (e) => { r.include = e.target.checked; e.target.closest('tr').className = r.include ? '' : 'inactive'; count(); } })),
         h('td', null, r.email, r.name ? h('div', { class: 'cell-sub' }, r.name) : null),
-        h('td', null, r.fellow && !r.pgy ? h('span', { class: 'cell-sub' }, 'Fellow') : null,
-          pgySelect(r.pgy, (e) => { r.pgy = e.target.value ? Number(e.target.value) : null; }, `PGY for ${r.email}`)),
+        h('td', null, pgySelect(r.pgy, (e) => { r.pgy = e.target.value ? Number(e.target.value) : null; }, `PGY for ${r.email}`)),
         h('td', null, r.status === 'member' ? h('span', { class: 'badge good' }, 'already in program')
           : r.status === 'invited' ? h('span', { class: 'badge' }, 'already invited') : null)))))),
     h('p', { class: 'hint' }, 'PGY was read from the list where it could be. Rows without one use the PGY below.'));
@@ -132,7 +131,7 @@ export function render(main, { rerender }) {
         const fallback = pgy.value ? Number(pgy.value) : null;
         const { error } = await sb.from('invitations').insert(fresh.map((r) => ({
           email: r.email, program_id: state.program.id, role: role.value,
-          pgy_year: r.pgy ?? fallback, note: note.value.trim() || (r.fellow ? 'Fellow' : null),
+          pgy_year: r.pgy ?? fallback, note: note.value.trim() || null,
         })));
         submit.disabled = false;
         if (error) { msg.className = 'form-msg error'; msg.textContent = errorText(error); return; }
@@ -213,7 +212,7 @@ const EMAIL_IN_TEXT = /[^\s@,;<>()"'\[\]]+@[^\s@,;<>()"'\[\]]+\.[a-z]{2,}/gi;
 export function parseInviteList(text) {
   const out = [];
   const seen = new Set();
-  let level = null; let fellow = false; let name = '';
+  let level = null; let name = '';
   for (const raw of text.split(/\r?\n/)) {
     const line = raw.replace(/<?mailto:[^>\s]*>?/gi, ' ').trim();
     if (!line) continue;
@@ -222,7 +221,7 @@ export function parseInviteList(text) {
     const lv = LEVEL_RE.exec(rest);
     const isFellow = FELLOW_RE.test(rest);
     if (!found.length) {
-      if (lv || isFellow) { level = lv ? Number(lv[1]) : null; fellow = isFellow && !lv; name = ''; }
+      if (lv || isFellow) { level = lv ? Number(lv[1]) : FELLOW; name = ''; }
       const leftover = rest.replace(LEVEL_RE, '').replace(FELLOW_RE, '').replace(/[|:\-–]+/g, ' ').trim();
       if (leftover && /[a-z]/i.test(leftover) && leftover.length <= 80) name = leftover.replace(/^(dr\.?|dre\.?)\s+/i, '');
       continue;
@@ -234,7 +233,7 @@ export function parseInviteList(text) {
       if (seen.has(email)) continue;
       seen.add(email);
       out.push({
-        email, pgy: lv ? Number(lv[1]) : level, fellow: lv ? false : (isFellow || fellow),
+        email, pgy: lv ? Number(lv[1]) : isFellow ? FELLOW : level,
         name: found.length === 1 && inlineName ? inlineName : name,
       });
     }

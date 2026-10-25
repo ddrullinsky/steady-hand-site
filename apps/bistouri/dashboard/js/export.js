@@ -1,6 +1,6 @@
 // CSV export: one row per case with human-readable names.
 import { state } from './api.js';
-import { toCSV, downloadText, personName, today } from './util.js';
+import { toCSV, downloadText, personName, pgyLabel, FELLOW, today } from './util.js';
 import {
   siteName, attendingName, roleName, approachName, categoryName, proceduresText, tasksText,
   displayFields, fieldValueText, urgencyLabel,
@@ -15,7 +15,7 @@ export function exportCasesCSV(cases, filenameStem, { dated = true } = {}) {
   const rows = [...cases].sort((a, b) => a.case_date.localeCompare(b.case_date)).map((c) => {
     const m = members.get(c.resident_id) || {};
     return [
-      c.case_date, personName(m), m.email || '', m.pgy_year || '', state.program.name,
+      c.case_date, personName(m), m.email || '', m.pgy_year === FELLOW ? pgyLabel(FELLOW) : (m.pgy_year || ''), state.program.name,
       siteName(c.site_id), attendingName(c), urgencyLabel(c.urgency),
       c.role_id ? roleName(c.role_id) : '', approachName(c.approach_id),
       c.categoryIds.map(categoryName).join('; '), proceduresText(c), tasksText(c),

@@ -1,6 +1,6 @@
 // Residents: sortable roster with logging activity. Click a row for detail.
 import { state } from '../api.js';
-import { h, clear, fmtDate, relDays, fmtNum, personName, pgyLabel, emptyState, icon, toast, today, addDays } from '../util.js';
+import { h, clear, fmtDate, relDays, fmtNum, personName, pgyLabel, FELLOW, emptyState, icon, toast, today, addDays } from '../util.js';
 import { exportCasesCSV } from '../export.js';
 
 const view = { sort: 'name', dir: 1, pgy: 'all', q: '', inactive: false, pds: false };
@@ -77,7 +77,7 @@ export function render(main, { rerender }) {
         onkeydown: (e) => { if (e.key === 'Enter') location.hash = `#/resident/${m.user_id}`; },
       },
       h('td', null, h('div', { class: 'cell-name' }, personName(m)), h('div', { class: 'cell-sub' }, m.email)),
-      h('td', { class: 'num' }, m.role === 'program_director' ? h('span', { class: 'badge brand' }, 'PD') : (m.pgy_year || '—')),
+      h('td', { class: 'num' }, m.role === 'program_director' ? h('span', { class: 'badge brand' }, 'PD') : m.pgy_year === FELLOW ? pgyLabel(FELLOW) : (m.pgy_year || '—')),
       h('td', { class: 'num' }, fmtNum(m.case_count)),
       h('td', { class: 'num' }, fmtNum(m.cases_last_30d)),
       h('td', null, m.last_case_date ? fmtDate(m.last_case_date) : '—',
