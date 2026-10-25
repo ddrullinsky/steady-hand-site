@@ -2,7 +2,7 @@
 // Same columns and cell rules as the iPhone app (ios/Bistouri/CaseExport.swift),
 // which match the dashboard's export, so a resident's file and their program
 // director's file line up. Built from the cases on this device, so it works offline.
-import { toCSV, downloadText, today } from '../shared/util.js';
+import { toCSV, downloadText, today, pgyLabel, FELLOW } from '../shared/util.js';
 import { state, referenceFor } from './data.js';
 import { nameIn, procedureName, categoryOf, siteShort } from './ref.js';
 
@@ -50,7 +50,7 @@ export function caseCSV(programId = state.activeProgramId, ref = state.ref) {
     });
     const values = c.field_values || {};
     return [
-      c.case_date, resident, email, pgy ? String(pgy) : '', program?.name ?? '',
+      c.case_date, resident, email, pgy === FELLOW ? pgyLabel(FELLOW) : pgy ? String(pgy) : '', program?.name ?? '',
       siteShort(ref.sites.find((s) => s.id === c.site_id)),
       nameIn(ref.attendings, c.attending_id) ?? c.attending_name ?? '',
       c.urgency ? c.urgency[0].toUpperCase() + c.urgency.slice(1) : '',

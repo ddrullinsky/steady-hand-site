@@ -207,8 +207,12 @@ export function personName(m) {
   return m.full_name || (m.email ? m.email.split('@')[0] : 'Unnamed');
 }
 
+/** pgy_year 9 is a fellow; it sorts after PGY-8. */
+export const FELLOW = 9;
+export const PGY_LEVELS = [1, 2, 3, 4, 5, 6, 7, 8, FELLOW];
+
 export function pgyLabel(p) {
-  return p ? `PGY-${p}` : 'PGY —';
+  return p === FELLOW ? 'Fellow' : p ? `PGY-${p}` : 'PGY —';
 }
 
 export function byOrder(a, b) {

@@ -1,6 +1,6 @@
 // First run: name, program and PGY year (ios/Bistouri/ProgramPickerView.swift).
 // Also "Join another program" from Settings.
-import { h, clear, logo } from '../../shared/util.js';
+import { h, clear, logo, FELLOW } from '../../shared/util.js';
 import { state, activeMemberships, activeMembership, joinProgram, refreshAccount, signOut, isConnectivityError } from '../data.js';
 import { card } from '../ui.js';
 
@@ -33,10 +33,11 @@ export function renderProgramPicker(root, { mode = 'onboarding', onDone } = {}) 
     }
   }
   function drawPgy() {
-    clear(pgyBox).append(...[1, 2, 3, 4, 5, 6, 7, 8].map((y) => h('button', {
-      type: 'button', 'aria-pressed': pgy === y ? 'true' : 'false', 'aria-label': `PGY ${y}`,
+    const choice = (y, label, cls) => h('button', {
+      type: 'button', class: cls, 'aria-pressed': pgy === y ? 'true' : 'false', 'aria-label': y === FELLOW ? 'Fellow' : `PGY ${y}`,
       onclick: () => { pgy = y; drawPgy(); },
-    }, String(y))));
+    }, label);
+    clear(pgyBox).append(...[1, 2, 3, 4, 5, 6, 7, 8].map((y) => choice(y, String(y))), choice(FELLOW, 'Fellow', 'pgy-fellow'));
   }
 
   go.addEventListener('click', async () => {

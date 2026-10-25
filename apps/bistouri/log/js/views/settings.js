@@ -1,6 +1,6 @@
 // Settings (ios/Bistouri/SettingsView.swift and DeleteAccountView.swift).
 // Left out on the web: the Face ID app lock.
-import { h, clear, logo, toast, confirmDialog } from '../../shared/util.js';
+import { h, clear, logo, toast, confirmDialog, pgyLabel, PGY_LEVELS } from '../../shared/util.js';
 import {
   state, activeProgram, activeMembership, activeMemberships, setActiveProgram, updateName, updatePGY,
   setAnnounceAnonymously, refreshAll, signOut, sendDeletionCode, verifyDeletionCode, verifyDeletionPassword,
@@ -63,7 +63,7 @@ export function renderSettings(root) {
     onchange: async (e) => {
       try { await updatePGY(Number(e.target.value)); pgyError.textContent = ''; } catch { pgyError.textContent = "Couldn't update your PGY year. Check your connection."; }
     },
-  }, [1, 2, 3, 4, 5, 6, 7, 8].map((y) => h('option', { value: y, selected: (membership?.pgy_year || 1) === y }, `PGY-${y}`)));
+  }, PGY_LEVELS.map((y) => h('option', { value: y, selected: (membership?.pgy_year || 1) === y }, pgyLabel(y))));
 
   const programName = (id) => state.programs.find((p) => p.id === id)?.name || 'Program';
   const programCell = memberships.length > 1

@@ -406,6 +406,7 @@ details.dev summary { font-weight: 650; cursor: pointer; }
 .pgy-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
 .pgy-row button { min-height: 48px; border-radius: 12px; border: 0; background: var(--surface-2); font-size: 19px; font-weight: 700; padding: 0; }
 .pgy-row button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+.pgy-row .pgy-fellow { grid-column: 1 / -1; font-size: 17px; }
 
 /* ---------- Dialogs and toasts (util.dialog / util.toast) ---------- */
 dialog.modal { border: 0; border-radius: 22px; padding: 22px; width: min(92vw, 380px); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-lg); }
