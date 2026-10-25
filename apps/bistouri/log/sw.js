@@ -4,7 +4,7 @@
 //
 // VERSION is replaced with the git commit by scripts/deploy_log.sh, so every
 // deploy installs a fresh cache and removes the old one.
-const VERSION = '9dbd73e';
+const VERSION = '97d05e5';
 const CACHE = `bistouri-log-${VERSION}`;
 
 const SHELL = [

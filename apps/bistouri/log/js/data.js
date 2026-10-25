@@ -246,6 +246,19 @@ async function loadReferenceCache(pid) {
   }
 }
 
+/** A program's lists for exporting its cases: the active copy, else the copy cached on
+ *  this device, else a fresh download. Used by the export offered before account
+ *  deletion, which covers every program, not only the active one. */
+export async function referenceFor(pid) {
+  if (state.ref.programId === pid) return state.ref;
+  let cached = await kv.get(`reference:${pid}`);
+  if (!cached) {
+    await refreshReference(pid);
+    cached = await kv.get(`reference:${pid}`);
+  }
+  return { ...emptyRef(pid), ...(cached || {}) };
+}
+
 /** The program's lists, active rows only, as the app fetches them. */
 export async function refreshReference(pid) {
   const q = (table, cols, opts = {}) => {

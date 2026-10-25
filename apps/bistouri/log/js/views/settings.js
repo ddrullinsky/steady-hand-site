@@ -7,7 +7,7 @@ import {
   deleteVerifiedAccount, isConnectivityError,
 } from '../data.js';
 import { icon, toggleSwitch, navigate, leave, syncValue } from '../ui.js';
-import { exportCases } from '../export.js';
+import { exportCases, exportAllCases } from '../export.js';
 import { usesPassword } from './signin.js';
 
 const SITE = 'https://steadyhandsoftware.com/apps/bistouri';
@@ -217,6 +217,28 @@ export function renderDeleteAccount(root) {
   }
 
   const bullet = (text) => h('li', null, text);
+
+  // Offered first so a resident leaving the program keeps a copy of their training record.
+  const downloadNote = h('p', { class: 'hint', id: 'download-note' });
+  const downloadBtn = h('button', {
+    type: 'button', class: 'btn btn-block', id: 'download-before-delete',
+    onclick: async () => {
+      downloadBtn.disabled = true; downloadNote.textContent = '';
+      try {
+        const { files, count } = await exportAllCases();
+        downloadNote.textContent = `Downloaded ${count} ${count === 1 ? 'case' : 'cases'}${files > 1 ? ` in ${files} files, one per program` : ''}.`;
+      } catch (err) {
+        console.error(err);
+        downloadNote.textContent = "Couldn't create the file. Try again.";
+      }
+      downloadBtn.disabled = false;
+    },
+  }, icon('share'), 'Download your cases first');
+  const downloadCard = caseCount > 0 ? h('div', { class: 'card stack' },
+    h('div', { style: { fontWeight: 700 } }, 'Keep a copy'),
+    h('p', { class: 'small', style: { margin: 0 } }, "Your case log is part of your training record and can't be recovered once your account is deleted. Save a spreadsheet of every case you've logged before you continue."),
+    downloadBtn, downloadNote) : null;
+
   clear(root).append(h('div', { class: 'screen' },
     h('header', { class: 'topbar' },
       h('div', { class: 'left' }, h('button', { type: 'button', class: 'toplink', onclick: () => { if (!busy) leave('#/settings'); } }, icon('back'), 'Settings')),
@@ -230,6 +252,7 @@ export function renderDeleteAccount(root) {
           bullet('Your program memberships. Your program directors will no longer see your cases.'),
           bullet('The copy of your cases on this device'))),
       h('p', { class: 'hint' }, "This can't be undone. To stop using Bistouri on this device only, sign out instead."),
+      downloadCard,
       h('div', { class: 'card' }, stepBox),
       errorEl)));
   stepSend();

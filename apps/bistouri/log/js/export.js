@@ -3,7 +3,7 @@
 // which match the dashboard's export, so a resident's file and their program
 // director's file line up. Built from the cases on this device, so it works offline.
 import { toCSV, downloadText, today } from '../shared/util.js';
-import { state, activeProgram, activeMembership } from './data.js';
+import { state, referenceFor } from './data.js';
 import { nameIn, procedureName, categoryOf, siteShort } from './ref.js';
 
 /** Numbers stay bare so spreadsheets can sum them; yes/no and lists read as words. */
@@ -23,14 +23,13 @@ function slug(s) {
   return out || 'bistouri-cases';
 }
 
-export function caseCSV() {
-  const ref = state.ref;
-  const program = activeProgram();
+export function caseCSV(programId = state.activeProgramId, ref = state.ref) {
+  const program = state.programs.find((p) => p.id === programId);
   const email = state.user.email;
   const resident = state.profileName || email.split('@')[0];
-  const pgy = activeMembership()?.pgy_year;
+  const pgy = state.memberships.find((m) => m.program_id === programId)?.pgy_year;
   const cases = state.cases
-    .filter((c) => c.program_id === state.activeProgramId && !c.deleted)
+    .filter((c) => c.program_id === programId && !c.deleted)
     .sort((a, b) => a.case_date.localeCompare(b.case_date) || String(a.created_at).localeCompare(String(b.created_at)));
 
   // Active program fields, then any older field keys still present in these cases.
@@ -73,4 +72,21 @@ export function exportCases() {
   const { filename, text, count } = caseCSV();
   downloadText(filename, text);
   return count;
+}
+
+/** Before deleting an account: one file per program the resident has cases in
+ *  (each program has its own lists and extra fields, so they don't share columns). */
+export async function exportAllCases() {
+  const order = new Map(state.programs.map((p) => [p.id, p.sort_order]));
+  const ids = [...new Set(state.cases.filter((c) => !c.deleted).map((c) => c.program_id))]
+    .sort((a, b) => (order.get(a) ?? 999) - (order.get(b) ?? 999));
+  let count = 0;
+  for (const [i, pid] of ids.entries()) {
+    const { filename, text, count: n } = caseCSV(pid, await referenceFor(pid));
+    // A short pause between files so the browser accepts each download.
+    if (i > 0) await new Promise((r) => setTimeout(r, 400));
+    downloadText(filename, text);
+    count += n;
+  }
+  return { files: ids.length, count };
 }
