@@ -8,8 +8,8 @@ import {
   state, programCases, activeMembership, saveLocalCase, softDeleteCase, announce, uuid,
 } from '../data.js';
 import {
-  procedure, procedureName, nameIn, categoryOf, siteShort, URGENCIES, proceduresByCategory, categoryChipName, epasForCase,
-  STAGE_NAMES, newlyEarned,
+  procedure, procedureName, procedureLabels, procedureSearchMatch, DETAIL_LIMIT, nameIn, categoryOf, siteShort, URGENCIES,
+  proceduresByCategory, categoryChipName, epasForCase, STAGE_NAMES, newlyEarned,
 } from '../ref.js';
 import { card, chip, icon, tickmark, openSheet, leave } from '../ui.js';
 import { prefs } from '../store.js';
@@ -27,7 +27,7 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
 
   // ----- Form state -----
   const f = {
-    caseDate: today(), siteId: null, attendingText: '', otherAttending: false, roleId: null, procedureIds: [],
+    caseDate: today(), siteId: null, attendingText: '', otherAttending: false, roleId: null, procedureIds: [], procedureDetails: {},
     approachId: null, urgency: 'elective', taskCounts: new Map(), fieldValues: {}, numberText: {},
     attempted: false, sectionOpen: {}, showOtherEPAs: false,
   };
@@ -35,6 +35,7 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
   function fill(c) {
     Object.assign(f, {
       siteId: c.site_id, attendingText: attendingOf(c), roleId: c.role_id, procedureIds: [...c.procedure_ids],
+      procedureDetails: { ...(c.procedure_details || {}) },
       approachId: c.approach_id, urgency: c.urgency || null,
       taskCounts: new Map(c.tasks.map((t) => [t.task_id, t.count])),
       fieldValues: { ...(c.field_values || {}) }, numberText: {},
@@ -168,8 +169,12 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
     if (fd.type === 'multichoice') return !Array.isArray(v) || !v.length;
     return false;
   }
+  /** An "Other ..." procedure, or one already described before the program changed it. */
+  const showsDetail = (id) => !!procedure(ref, id)?.asks_detail || !!(f.procedureDetails[id] || '').trim();
+  const missingDetail = (id) => !!procedure(ref, id)?.asks_detail && !(f.procedureDetails[id] || '').trim();
   function isValid() {
     if (!f.procedureIds.length) return false;
+    if (f.procedureIds.some(missingDetail)) return false;
     for (const fd of ref.fields) {
       if (fd.type === 'number' && numberError(fd) && (f.numberText[fd.key] || '') !== '') return false;
       if (fd.required && isMissing(fd)) return false;
@@ -259,6 +264,7 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
                 f.procedureIds = f.procedureIds.filter((x) => x !== id); redraw('procedures', 'tasks', 'epa');
               } }, icon('x', 16)))))
           : h('p', { class: f.attempted ? 'err' : 'hint' }, f.attempted ? 'Pick at least one procedure.' : 'Tap a quick pick or browse the full list.'),
+        ...f.procedureIds.filter(showsDetail).map(detailField),
         picks.length ? h('div', { class: 'sub-head' }, 'Quick picks') : null,
         picks.length ? h('div', { class: 'chips' }, picks.map((p) => chip(procedureName(ref, p.id), false, () => {
           if (!f.procedureIds.includes(p.id)) f.procedureIds.push(p.id);
@@ -396,7 +402,8 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
         .map((c) => ({ id: c.id, el: chip(c.label, false, () => { catId = catId === c.id ? null : c.id; draw(); }) }));
       const chipRow = h('div', { class: 'chips scroll', role: 'group', 'aria-label': 'Category' }, catChips.map((c) => c.el));
       const doneBtn = h('button', { type: 'button', class: 'btn btn-primary btn-block', id: 'procedures-done', onclick: close });
-      const row = (p, showCategory) => {
+      // `alias` is the search term that found the procedure, so "PFO" -> "ASD closure" makes sense.
+      const row = (p, showCategory, alias) => {
         const sel = f.procedureIds.includes(p.id);
         const fav = prefs.get(favKey, []).includes(p.id);
         return h('div', { class: 'pick-row' },
@@ -406,13 +413,17 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
               f.procedureIds = sel ? f.procedureIds.filter((x) => x !== p.id) : [...f.procedureIds, p.id];
               draw();
             },
-          }, tickmark(sel), h('span', null, p.name,
-            showCategory ? h('div', { class: 'tiny muted' }, nameIn(ref.categories, p.category_id) || '') : null)),
+          }, tickmark(sel), h('span', null, p.name, subtitle(alias ? `Also called ${alias}` : null,
+            showCategory ? nameIn(ref.categories, p.category_id) : null))),
           h('button', {
             type: 'button', class: 'star', 'aria-pressed': fav ? 'true' : 'false',
             'aria-label': fav ? 'Remove from favourites' : 'Add to favourites',
             onclick: () => { toggleFavourite(p.id); draw(); },
           }, icon('star', 20)));
+      };
+      const subtitle = (...parts) => {
+        const text = parts.filter(Boolean).join(' · ');
+        return text ? h('div', { class: 'tiny muted' }, text) : null;
       };
       const group = (title, iconName, rows) => [
         h('div', { class: 'list-head' }, iconName ? icon(iconName, 14) : null, title),
@@ -431,10 +442,10 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
           if (recents.length) list.append(...group('Recent', 'clock', recents.map((p) => row(p))));
           for (const g of proceduresByCategory(ref)) list.append(...group(g.category.name, null, g.procedures.map((p) => row(p))));
         } else {
-          const matches = ref.procedures.filter((p) => (!catId || p.category_id === catId)
-            && (p.name.toLowerCase().includes(q) || (nameIn(ref.categories, p.category_id) || '').toLowerCase().includes(q)));
+          const matches = ref.procedures.filter((p) => !catId || p.category_id === catId)
+            .map((p) => ({ p, alias: procedureSearchMatch(ref, p, q) })).filter((m) => m.alias !== undefined);
           if (!matches.length) list.append(h('div', { class: 'empty' }, h('p', { class: 'muted' }, `No results for “${query.trim()}”`)));
-          else list.append(h('div', { class: 'list-group', style: { marginTop: '12px' } }, matches.map((p) => row(p, !catId))));
+          else list.append(h('div', { class: 'list-group', style: { marginTop: '12px' } }, matches.map((m) => row(m.p, !catId, m.alias))));
         }
         doneBtn.textContent = f.procedureIds.length ? `Done · ${f.procedureIds.length} selected` : 'Done';
       }
@@ -499,6 +510,20 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
     return cases.filter((c) => c.case_date === f.caseDate && c.procedure_ids.some((p) => chosen.has(p)));
   }
 
+  function detailField(id) {
+    const name = procedureName(ref, id) ?? 'Unknown procedure';
+    const missing = f.attempted && missingDetail(id);
+    return h('div', { class: 'stack', style: { gap: '4px' } },
+      h('div', { class: 'sub-head' }, name),
+      h('input', {
+        class: `field${missing ? ' invalid' : ''}`, type: 'text', value: f.procedureDetails[id] || '', maxlength: DETAIL_LIMIT,
+        placeholder: 'What was done, e.g. Damus-Kaye-Stansel', autocomplete: 'off', 'aria-label': `Describe ${name}`,
+        dataset: { procedureDetail: name },
+        oninput: (e) => { f.procedureDetails[id] = e.target.value; },
+      }),
+      h('p', { class: missing ? 'err' : 'hint' }, missing ? 'Say in a few words what was done.' : 'Procedure only. No patient details.'));
+  }
+
   async function save() {
     f.attempted = true;
     document.activeElement?.blur?.();
@@ -511,7 +536,7 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
     const matches = sameDayMatches();
     if (matches.length) {
       const lines = matches.slice(0, 3).map((c) => {
-        const procs = c.procedure_ids.map((p) => procedureName(ref, p)).filter(Boolean).join(' + ');
+        const procs = procedureLabels(ref, c).join(' + ');
         const a = attendingOf(c);
         return a ? `${procs} with ${a}` : procs;
       });
@@ -539,6 +564,8 @@ export function renderCaseForm(root, mode, { onSaved } = {}) {
     target.attending_name = match || !name ? null : name;
     target.role_id = f.roleId;
     target.procedure_ids = [...f.procedureIds];
+    target.procedure_details = Object.fromEntries(f.procedureIds
+      .map((id) => [id, (f.procedureDetails[id] || '').trim()]).filter(([, text]) => text));
     target.approach_id = f.approachId;
     target.urgency = f.urgency;
     const known = new Set(ref.tasks.map((t) => t.id));

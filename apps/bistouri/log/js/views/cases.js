@@ -3,7 +3,7 @@
 // for editing; its ⋯ menu offers Edit, Duplicate and Delete (the app's swipes).
 import { h, clear, logo, confirmDialog } from '../../shared/util.js';
 import { state, programCases, pushPending, softDeleteCase } from '../data.js';
-import { procedureName, nameIn, siteShort, urgencyLabel, attendingName, procedureIdsInCategory } from '../ref.js';
+import { procedureLabels, nameIn, siteShort, urgencyLabel, attendingName, procedureIdsInCategory } from '../ref.js';
 import { icon, actionSheet, navigate, openSheet, syncValue } from '../ui.js';
 import { epaCard } from './caseForm.js';
 
@@ -25,7 +25,7 @@ export function renderCases(root) {
       if (view.roleFilter && c.role_id !== view.roleFilter) return false;
       if (catProcs && !c.procedure_ids.some((p) => catProcs.has(p))) return false;
       if (!q) return true;
-      if (c.procedure_ids.some((p) => (procedureName(ref, p) || '').toLowerCase().includes(q))) return true;
+      if (procedureLabels(ref, c).some((n) => n.toLowerCase().includes(q))) return true;
       return attendingName(ref, c).toLowerCase().includes(q);
     });
   }
@@ -58,7 +58,7 @@ export function renderCases(root) {
 
   function caseRow(c) {
     const [y, m, d] = c.case_date.split('-').map(Number);
-    const names = c.procedure_ids.map((p) => procedureName(ref, p)).filter(Boolean);
+    const names = procedureLabels(ref, c);
     return h('div', { class: 'case-row', dataset: { caseId: c.id } },
       h('button', { type: 'button', class: 'case-main', onclick: () => navigate(`#/case/${c.id}`) },
         h('span', { class: 'daytile' }, h('b', null, String(d)), h('span', null, WEEKDAYS[new Date(y, m - 1, d).getDay()])),

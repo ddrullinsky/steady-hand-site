@@ -17,6 +17,23 @@ export function emptyRef(programId = null) {
 const find = (list, id) => (id ? list.find((x) => x.id === id) : null);
 export const procedure = (ref, id) => find(ref.procedures, id);
 export const procedureName = (ref, id) => procedure(ref, id)?.name ?? null;
+/** "Other congenital procedure (Damus-Kaye-Stansel)" when the resident described it. */
+export function procedureLabel(ref, id, detail) {
+  const name = procedureName(ref, id);
+  const d = (detail || '').trim();
+  return name && d ? `${name} (${d})` : name;
+}
+/** A case's procedure names for display, with descriptions. */
+export const procedureLabels = (ref, c) =>
+  c.procedure_ids.map((p) => procedureLabel(ref, p, c.procedure_details?.[p])).filter(Boolean);
+/** undefined if the procedure doesn't match `q` (lower case); otherwise the search term
+ *  that found it, or null when the name or category matched. */
+export function procedureSearchMatch(ref, p, q) {
+  if (p.name.toLowerCase().includes(q) || (nameIn(ref.categories, p.category_id) || '').toLowerCase().includes(q)) return null;
+  return (p.aliases || []).find((a) => a.toLowerCase().includes(q));
+}
+/** Matches case_procedures.detail on the server. */
+export const DETAIL_LIMIT = 100;
 export const nameIn = (list, id) => find(list, id)?.name ?? null;
 export const categoryOf = (ref, procId) => procedure(ref, procId)?.category_id ?? null;
 export const siteShort = (site) => (site ? (site.short_name?.trim() ? site.short_name : site.name) : '');

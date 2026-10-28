@@ -4,7 +4,7 @@
 // director's file line up. Built from the cases on this device, so it works offline.
 import { toCSV, downloadText, today, pgyLabel, FELLOW } from '../shared/util.js';
 import { state, referenceFor } from './data.js';
-import { nameIn, procedureName, categoryOf, siteShort } from './ref.js';
+import { nameIn, procedureLabel, categoryOf, siteShort } from './ref.js';
 
 /** Numbers stay bare so spreadsheets can sum them; yes/no and lists read as words. */
 function cell(v) {
@@ -57,7 +57,7 @@ export function caseCSV(programId = state.activeProgramId, ref = state.ref) {
       c.role_id ? (nameIn(ref.roles, c.role_id) ?? 'Role not recorded') : '',
       nameIn(ref.approaches, c.approach_id) ?? '',
       categories.map((id) => nameIn(ref.categories, id)).filter(Boolean).join('; '),
-      c.procedure_ids.map((p) => procedureName(ref, p) ?? 'Unknown procedure').join('; '),
+      c.procedure_ids.map((p) => procedureLabel(ref, p, c.procedure_details?.[p]) ?? 'Unknown procedure').join('; '),
       tasks.join('; '),
       ...fields.map((f) => cell(values[f.key])),
       ...extraKeys.map((k) => cell(values[k])),

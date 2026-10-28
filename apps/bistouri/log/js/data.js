@@ -271,7 +271,7 @@ export async function refreshReference(pid) {
   const [sites, categories, procedures, tasks, taskSections, approaches, roles, attendings, fields, targets] = await Promise.all([
     q('sites', 'id,name,short_name,sort_order', { program: false }),
     q('procedure_categories', 'id,name,sort_order'),
-    q('procedures', 'id,category_id,name,sort_order,typical_task_ids'),
+    q('procedures', 'id,category_id,name,sort_order,typical_task_ids,aliases,asks_detail'),
     q('procedural_tasks', 'id,name,sort_order,section_id,countable'),
     q('task_sections', 'id,name,sort_order,category_ids'),
     q('approaches', 'id,name,sort_order'),
@@ -413,6 +413,8 @@ export function payload(c) {
     deleted: !!c.deleted,
     client_updated_at: c.client_updated_at,
     procedure_ids: c.procedure_ids,
+    procedure_details: Object.fromEntries(Object.entries(c.procedure_details || {})
+      .filter(([id, text]) => c.procedure_ids.includes(id) && text.trim())),
     tasks: c.tasks.filter((t) => t.count > 0),
   };
 }
@@ -508,7 +510,7 @@ export async function pullAndMerge() {
   for (let from = 0; ; from += size) {
     const { data, error } = await sb.from('cases')
       .select('id,program_id,case_date,site_id,attending_id,attending_name,urgency,approach_id,role_id,field_values,' +
-              'deleted,client_updated_at,created_at,updated_at,case_procedures(procedure_id),case_tasks(task_id,count)')
+              'deleted,client_updated_at,created_at,updated_at,case_procedures(procedure_id,detail),case_tasks(task_id,count)')
       .eq('resident_id', uid).order('id').range(from, from + size - 1);
     if (error) {
       if (isConnectivityError(error)) { state.sync.phase = 'offline'; changed('sync'); }
@@ -547,6 +549,7 @@ export async function pullAndMerge() {
       field_values: r.field_values || {},
       deleted: r.deleted,
       procedure_ids: (r.case_procedures || []).map((p) => p.procedure_id),
+      procedure_details: Object.fromEntries((r.case_procedures || []).filter((p) => p.detail).map((p) => [p.procedure_id, p.detail])),
       tasks: (r.case_tasks || []).map((t) => ({ task_id: t.task_id, count: t.count || 1 })),
       client_updated_at: new Date(remoteStamp).toISOString(),
       created_at: local?.created_at || r.created_at || new Date(remoteStamp).toISOString(),
