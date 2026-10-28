@@ -67,8 +67,14 @@ export function tasksText(c, sep = '; ') {
   return [...c.tasks].sort((a, b) => (order.get(a.task_id)?.sort_order ?? 0) - (order.get(b.task_id)?.sort_order ?? 0)).map((t) => `${taskName(t.task_id)}${t.count > 1 ? ` ×${t.count}` : ''}`).join(sep);
 }
 
-export function proceduresText(c) {
-  return c.procedureIds.map(procedureName).join('; ');
+/** "Other congenital procedure (Damus-Kaye-Stansel)" when the resident described it. */
+export function procedureLabel(c, id) {
+  const detail = (c.procedureDetails?.[id] || '').trim();
+  return detail ? `${procedureName(id)} (${detail})` : procedureName(id);
+}
+
+export function proceduresText(c, sep = '; ') {
+  return c.procedureIds.map((id) => procedureLabel(c, id)).join(sep);
 }
 
 // ---------------------------------------------------------------------------

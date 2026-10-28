@@ -110,7 +110,7 @@ export async function loadAchievements(pid = state.program.id) {
 export async function loadCases(pid = state.program.id) {
   const rows = await fetchAll(() => sb.from('cases')
     .select('id,resident_id,case_date,created_at,site_id,attending_id,attending_name,urgency,approach_id,role_id,field_values,' +
-            'case_procedures(procedure_id),case_tasks(task_id,count)')
+            'case_procedures(procedure_id,detail),case_tasks(task_id,count)')
     .eq('program_id', pid).eq('deleted', false)
     .order('case_date', { ascending: false }).order('id'));
   state.cases = enrichCases(rows);
@@ -121,6 +121,8 @@ function enrichCases(rows) {
   const procs = state.config?.byId.procedures || new Map();
   for (const c of rows) {
     c.procedureIds = (c.case_procedures || []).map((p) => p.procedure_id);
+    // Procedure id -> the resident's description of an "Other ..." procedure.
+    c.procedureDetails = Object.fromEntries((c.case_procedures || []).filter((p) => p.detail).map((p) => [p.procedure_id, p.detail]));
     c.categoryIds = [...new Set(c.procedureIds.map((id) => procs.get(id)?.category_id).filter(Boolean))];
     c.tasks = (c.case_tasks || []).map((t) => ({ task_id: t.task_id, count: t.count || 1 }));
     c.field_values = c.field_values || {};

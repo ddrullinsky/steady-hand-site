@@ -7,8 +7,8 @@ import {
 } from '../util.js';
 import {
   casesByResident, inRange, activeTargets, targetCount, targetTitle, targetDetail, roleOrder, roleName,
-  categoryName, taskName, taskTotals, siteName, attendingName, approachName, procedureName, displayFields,
-  fieldValueText, urgencyLabel, tasksText,
+  categoryName, taskName, taskTotals, siteName, attendingName, approachName, displayFields,
+  fieldValueText, urgencyLabel, tasksText, proceduresText,
 } from '../stats.js';
 import { barChart } from '../charts.js';
 import { exportCasesCSV } from '../export.js';
@@ -221,7 +221,7 @@ export function render(main, { args, rerender }) {
       h('td', null, attendingName(c) || '—'),
       h('td', null, c.role_id ? roleName(c.role_id) : '—'),
       h('td', null, approachName(c.approach_id) || '—'),
-      h('td', { class: 'wrap' }, c.procedureIds.map(procedureName).join(', ') || '—'),
+      h('td', { class: 'wrap' }, proceduresText(c, ', ') || '—'),
       h('td', { class: 'wrap' }, c.tasks.length
         ? tasksText(c, ', ') : '—'),
       fields.map((f) => h('td', { style: { whiteSpace: 'nowrap' } }, fieldValueText(f, c.field_values[f.key]) || '—')))))))

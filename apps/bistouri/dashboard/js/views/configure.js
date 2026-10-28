@@ -295,6 +295,82 @@ function renderTasks(panel, usage) {
   }, input, h('button', { class: 'btn', type: 'submit' }, icon('plus'), 'Add section')));
 }
 
+/** Buttons beside a procedure: suggested tasks, search terms, and what residents
+ *  typed for an "Other ..." procedure. */
+function procedureExtras(proc) {
+  return h('span', { style: { display: 'inline-flex', gap: '6px', alignItems: 'center' } },
+    typicalTasksButton(proc), searchTermsButton(proc), descriptionsButton(proc));
+}
+
+/** Button + dialog for a procedure's search terms and whether the app asks for a description. */
+function searchTermsButton(proc) {
+  const n = (proc.aliases || []).length;
+  return h('button', {
+    class: 'btn btn-ghost btn-sm',
+    title: 'Other names residents can search for, and whether the app asks them to describe the procedure',
+    onclick: () => editSearchTerms(proc),
+  }, [n ? plural(n, 'search term') : 'No search terms', proc.asks_detail ? ' · asks for a description' : '']);
+}
+
+async function editSearchTerms(proc) {
+  const terms = h('textarea', { rows: 3, style: { width: '100%' }, 'aria-label': 'Search terms' }, (proc.aliases || []).join(', '));
+  const asks = h('input', { type: 'checkbox', checked: !!proc.asks_detail });
+  const ok = await dialog({
+    title: `Search terms for “${proc.name}”`,
+    body: [
+      h('p', null, 'Other names residents might type, separated by commas: abbreviations, eponyms, older names. ',
+        'Searching “PFO” in the app finds every procedure with PFO among its search terms. They are never shown as the name.'),
+      terms,
+      h('label', { class: 'check', style: { display: 'flex', gap: '6px', marginTop: '14px' } }, asks,
+        h('span', null, h('strong', null, 'Ask residents to describe it. '),
+          'For an “Other …” procedure: the app asks what was done in a few words (100 characters, no patient details). ',
+          'Look at what they write to see which procedures to add.')),
+    ],
+    buttons: [{ label: 'Cancel', value: false, kind: 'ghost' }, { label: 'Save', value: true, kind: 'primary' }],
+  });
+  if (!ok) return;
+  const seen = new Set();
+  const aliases = terms.value.split(/[,\n]/).map((t) => t.trim()).filter((t) => {
+    const k = t.toLowerCase();
+    if (!t || seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  const { error } = await updateRow('procedures', proc.id, { aliases, asks_detail: asks.checked });
+  if (error) return toast(errorText(error), 'error');
+  toast('Saved');
+  await changed();
+}
+
+/** What residents wrote for this procedure, most common first. Only shown once there is some. */
+function descriptionsButton(proc) {
+  const counts = new Map();
+  for (const c of state.cases) {
+    const text = (c.procedureDetails?.[proc.id] || '').trim();
+    if (!text) continue;
+    const key = text.toLowerCase();
+    const e = counts.get(key) || { text, n: 0 };
+    e.n++;
+    counts.set(key, e);
+  }
+  if (!counts.size) return null;
+  const rows = [...counts.values()].sort((a, b) => b.n - a.n || a.text.localeCompare(b.text));
+  const total = rows.reduce((s, r) => s + r.n, 0);
+  return h('button', {
+    class: 'btn btn-ghost btn-sm', title: 'What residents wrote when they logged this procedure',
+    onclick: () => dialog({
+      title: `What residents logged as “${proc.name}”`,
+      body: [
+        h('p', null, 'Something that keeps coming up may deserve its own procedure. Add it to the category, ',
+          'and residents will find it next time.'),
+        h('table', { class: 'table' }, h('tbody', null, rows.map((r) => h('tr', null,
+          h('td', { class: 'wrap' }, r.text), h('td', { class: 'num' }, plural(r.n, 'case')))))),
+      ],
+      buttons: [{ label: 'Close', value: true, kind: 'primary' }],
+    }),
+  }, plural(total, 'description'));
+}
+
 /** Button + dialog to pick the tasks the app suggests first for a procedure. */
 function typicalTasksButton(proc) {
   const n = (proc.typical_task_ids || []).length;
@@ -385,7 +461,7 @@ function renderProcedures(panel, usage) {
           usage: (p) => usage.procedures.get(p.id) || 0,
           defaults: { program_id: state.program.id, category_id: cat.id },
           addKey: `procedures:${cat.id}`, onChanged: changed,
-          rowExtra: typicalTasksButton,
+          rowExtra: procedureExtras,
           deleteNote: (p) => { const n = targetsUsing('procedure_id', p.id); return n ? `${plural(n, 'target')} using it will also be deleted.` : null; },
         })));
     }
