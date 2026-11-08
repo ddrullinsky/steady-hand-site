@@ -1,12 +1,13 @@
 // app.js — the web edition of Cardiac Surgery Patient Companion.
 // Renders the same content.json the iOS app ships, as a read-only guide: the
-// operation guides, checklists and "When to get help". The personal tools —
-// surgery date, My path, bookmarks, checklist ticks, care-team number — are
-// the paid app's, and the page points to it wherever they would appear.
+// operation guides (with each guide's step-by-step path from surgery to home),
+// checklists, "When to get help" and the sources. The personal tools — surgery
+// date, bookmarks, checklist ticks, care-team number — stay in the app, and a
+// banner at the top of every page links to the App Store.
 // Only the language and the disclaimer acknowledgement are saved (localStorage);
 // the page makes no requests beyond its own files.
 
-import * as L from "./logic.js?v=db0a874418";
+import * as L from "./logic.js?v=e8f52868a2";
 
 // ---------------------------------------------------------------- storage
 // Keys match the app's UserDefaults keys, so the two read the same.
@@ -15,8 +16,8 @@ const K = {
   ack: "preop-disclaimer-ack-v3",
 };
 
-// The App Store page. Empty until the app is live: the "Get the app" cards then
-// say "coming soon" instead of linking. Format: https://apps.apple.com/app/id<Apple ID>
+// The App Store page. Empty until the app is live: the banner then says
+// "coming soon" instead of linking. Format: https://apps.apple.com/app/id<Apple ID>
 // (the Apple ID is on App Store Connect → App Information).
 const APP_STORE_URL = "https://apps.apple.com/app/id6791398154";
 const store = {
@@ -62,8 +63,11 @@ const WEB = {
     patientGuide: "Patient guide", duration: "Duration", hospital: "Hospital", recovery: "Recovery",
     done: "Done", langLabel: "Switch to French", privacy: "Privacy", support: "Support", menu: "Sections",
     privacyHref: "../privacy.html", supportHref: "../support.html",
-    appTitle: "Follow your own surgery with the app",
-    appBody: "The iPhone and iPad app adds the tools for your own journey: set your surgery date for a countdown and see which recovery week you are in, follow My path from surgery through intensive care, the ward and home, bookmark your operations, tick off your checklists and keep your care team's number one tap away. It works offline, and everything stays on your device.",
+    sameTitle: "Same information as the app",
+    sameBody: (app) => `This website shows the same guide as the ${app} app for iPhone and iPad. Nothing is left out; it is simply easier to read on a computer or a bigger screen.`,
+    sameExtra: "The app adds a few personal tools: your surgery date with a countdown, your own path through recovery, bookmarks, checklists you can tick off and your care team's number. It works offline, and everything stays on your device.",
+    pathChapter: "Step by step",
+    pathIntro: "From the weeks before surgery to home: what often happens at each stage.",
     appButton: "Download on the App Store",
     appSoon: "Coming soon to the App Store.",
     appHint: "In the app, this timeline opens on your current week once you set your surgery date.",
@@ -73,8 +77,11 @@ const WEB = {
     patientGuide: "Guide du patient", duration: "Durée", hospital: "Hôpital", recovery: "Convalescence",
     done: "Terminé", langLabel: "Passer en anglais", privacy: "Confidentialité", support: "Assistance", menu: "Sections",
     privacyHref: "../fr/confidentialite.html", supportHref: "../fr/assistance.html",
-    appTitle: "Suivez votre propre chirurgie avec l\u2019application",
-    appBody: "L\u2019application pour iPhone et iPad ajoute des outils pour votre propre parcours\u00a0: entrez la date de votre chirurgie pour voir un compte à rebours et votre semaine de convalescence, suivez Mon parcours de la chirurgie aux soins intensifs, à l\u2019unité de soins puis à la maison, épinglez vos opérations, cochez vos listes et gardez le numéro de votre équipe de soins à portée de main. Elle fonctionne hors ligne, et tout reste sur votre appareil.",
+    sameTitle: "Les mêmes informations que l\u2019application",
+    sameBody: (app) => `Ce site présente le même guide que l\u2019application ${app} pour iPhone et iPad. Rien n\u2019est laissé de côté\u00a0; c\u2019est simplement plus facile à lire sur un ordinateur ou un grand écran.`,
+    sameExtra: "L\u2019application ajoute quelques outils personnels\u00a0: la date de votre chirurgie avec un compte à rebours, votre propre parcours de convalescence, des favoris, des listes à cocher et le numéro de votre équipe de soins. Elle fonctionne hors ligne, et tout reste sur votre appareil.",
+    pathChapter: "Étape par étape",
+    pathIntro: "Des semaines avant la chirurgie jusqu\u2019au retour à la maison\u00a0: ce qui se passe souvent à chaque étape.",
     appButton: "Télécharger dans l\u2019App Store",
     appSoon: "Bientôt offerte dans l\u2019App Store.",
     appHint: "Dans l\u2019application, cette ligne du temps s\u2019ouvre sur votre semaine actuelle une fois la date de chirurgie entrée.",
@@ -99,20 +106,44 @@ const ICON = {
   phoneApp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>',
 };
 
-/** "Get the app" card, shown where the app's personal tools would be. */
-function appCard() {
+/** App Store banner at the top of every page: the website is the same
+ *  information as the app, laid out to be easier to read. `full` adds what the
+ *  app does beyond the website (home page only). */
+function appBanner(full = false) {
   const w = W();
-  return `<section class="card get-app" aria-labelledby="get-app">
-    <div class="get-app-head"><span class="glyph">${ICON.phoneApp}</span><h2 id="get-app" class="big">${esc(w.appTitle)}</h2></div>
-    <p class="lede small">${esc(w.appBody)}</p>
+  return `<aside class="get-app" aria-labelledby="get-app">
+    <span class="glyph">${ICON.phoneApp}</span>
+    <div class="get-app-text">
+      <p id="get-app" class="get-app-title">${esc(w.sameTitle)}</p>
+      <p class="small">${esc(w.sameBody(site().practiceName))}</p>
+      ${full ? `<p class="small mute">${esc(w.sameExtra)}</p>` : ""}
+    </div>
     ${APP_STORE_URL ? `<a class="primary" href="${esc(APP_STORE_URL)}">${esc(w.appButton)}</a>` : `<p class="status">${esc(w.appSoon)}</p>`}
+  </aside>`;
+}
+
+/** Citations for one page, then a link to the full list (as in the app). */
+function sourcesSection(ids) {
+  const src = T().sources;
+  if (!src || !ids?.length) return "";
+  return `<section class="sources" aria-labelledby="src-h">
+    <p class="eyebrow" id="src-h">${esc(src.sectionTitle)}</p>
+    ${sourceList(ids)}
+    <a class="all-sources" href="#/sources">${esc(src.allLink)} ›</a>
   </section>`;
+}
+
+function sourceList(ids) {
+  const byId = new Map(T().sources.items.map((x) => [x.id, x]));
+  return `<ul class="source-list">${ids.map((id) => byId.get(id)).filter(Boolean).map((x) =>
+    `<li><a href="${esc(x.url)}" target="_blank" rel="noopener"><span class="src-title">${esc(x.title)}</span><span class="src-pub">${esc(x.publisher)}</span></a></li>`).join("")}</ul>`;
 }
 
 // ---------------------------------------------------------------- views
 function viewHome() {
   const t = T(), s = site();
   let h = `<div class="stack">
+    ${appBanner(true)}
     <section class="hero">
       <p class="eyebrow">${esc(W().patientGuide)}</p>
       <h1>${esc(s.tagline)}</h1>
@@ -126,7 +157,7 @@ function viewHome() {
     if (!ops.length) continue;
     h += `<p class="eyebrow cat">${esc(t.categories[cat] || cat)}</p>${ops.map(opCard).join("")}`;
   }
-  h += `</section>${appCard()}<p class="quiet">${esc(s.footerNote)}</p></div>`;
+  h += `</section><p class="quiet">${esc(s.footerNote)}</p></div>`;
   return { title: s.practiceName, html: h };
 }
 
@@ -150,7 +181,32 @@ function opCard(op) {
   </a>`;
 }
 
-const CHAPTERS = ["what", "why", "before", "day", "hospital", "home", "activity"];
+const CHAPTERS = ["what", "why", "before", "day", "hospital", "home", "activity", "path"];
+const chapterLabel = (c) => c === "path" ? W().pathChapter : T().chapters[c];
+
+/** The shared recovery pathway an operation follows (same rule as the app's
+ *  PathContent.pathwayKey): its own `pathway` when that exists, else "open". */
+function pathwayFor(op) {
+  const p = T().path?.pathways || {};
+  if (op.pathway && p[op.pathway]) return p[op.pathway];
+  return p[op.category === "catheter" ? "catheter" : "open"] || p.open || null;
+}
+
+/** "Step by step" chapter: the app's My path content, as a plain timeline. */
+function pathChapter(op) {
+  const path = T().path, pw = pathwayFor(op);
+  if (!pw) return null;
+  const terms = (items) => `<dl class="terms">${items.map((x) => `<div><dt>${esc(x.t)}</dt><dd>${esc(x.d)}</dd></div>`).join("")}</dl>`;
+  return `<p class="lede">${esc(W().pathIntro)}</p>
+    ${pw.preOp?.length ? `<h3>${esc(path.preOpHeading)}</h3>${terms(pw.preOp)}` : ""}
+    <ol class="phases-tl static">${pw.phases.map((ph, i, all) => `<li class="current">
+      <div class="rail"><i></i>${i < all.length - 1 ? "<b></b>" : ""}</div>
+      <div class="phase-body">
+        <div class="phase-toggle"><h3>${esc(ph.label)}</h3><span class="days">${esc(ph.days)}</span></div>
+        ${terms(ph.milestones)}
+      </div></li>`).join("")}</ol>
+    <div class="callout soft">${esc(path.teamNote)}</div>`;
+}
 
 function viewOperation(key) {
   const t = T(), op = t.operations.find((o) => o.key === key);
@@ -171,18 +227,23 @@ function viewOperation(key) {
       `<div class="card phase-card"><span class="num">${pad2(i + 1)}</span><h3>${esc(p.t)}</h3><p class="lede">${esc(p.d)}</p></div>`).join("")}</div>`,
     home: `<p class="lede">${esc(d.home.body)}</p><div id="weeks">${weeksWidget(op)}</div><p class="quiet small">${esc(W().appHint)}</p>`,
     activity: `<p class="lede">${esc(d.activity.body)}</p>${terms(d.activity.rules)}`,
+    path: pathChapter(op),
   };
+  const chapters = CHAPTERS.filter((c) => body[c] != null);
+  const heading = (c) => c === "path" ? { heading: W().pathChapter } : d[c];
 
   const html = `<div class="stack">
+    ${appBanner()}
     <div class="op-head">
       <div><p class="eyebrow">${esc(op.short)}</p><h1>${esc(op.name)}</h1></div>
     </div>
     <p class="lede">${esc(op.lede)}</p>
     ${metaList(op)}
     <nav class="chapter-bar" aria-label="${esc(W().menu)}">
-      ${CHAPTERS.map((c, i) => `<a class="chip" href="#/op/${esc(op.key)}/${c}" data-chip="${c}">${pad2(i + 1)} · ${esc(t.chapters[c])}</a>`).join("")}
+      ${chapters.map((c, i) => `<a class="chip" href="#/op/${esc(op.key)}/${c}" data-chip="${c}">${pad2(i + 1)} · ${esc(chapterLabel(c))}</a>`).join("")}
     </nav>
-    ${CHAPTERS.map((c, i) => shell(i, c, d[c], body[c])).join("")}
+    ${chapters.map((c, i) => shell(i, c, heading(c), body[c])).join("")}
+    ${sourcesSection(op.sources)}
     <p class="quiet">${esc(s.footerNote)}</p>
   </div>`;
   return { title: `${op.name} — ${s.practiceName}`, html, op };
@@ -217,10 +278,11 @@ function viewPrepare() {
       <ul class="checks read">${cl.items.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>
     </section>`;
   const html = `<div class="stack">
+    ${appBanner()}
     <div class="section-head"><h1>${esc(s.tools)}</h1><p class="lede">${esc(W().toolsSub)}</p></div>
     ${list("prep", t.tools.prep)}
     ${list("pack", t.tools.pack)}
-    ${appCard()}
+    ${sourcesSection(t.sources?.prepare)}
     <p class="quiet">${esc(s.footerNote)}</p>
   </div>`;
   return { title: `${s.tabPrepare} — ${s.practiceName}`, html };
@@ -231,10 +293,26 @@ function viewHelp() {
   const tier = (k, x) => `<section class="tier ${k}" aria-labelledby="t-${k}"><h2 id="t-${k}">${esc(x.label)}</h2>
     <p class="${k === "emergency" ? "" : "lede"}">${esc(x.note)}</p><ul>${x.signs.map((g) => `<li>${esc(g)}</li>`).join("")}</ul></section>`;
   const html = `<div class="stack">
+    ${appBanner()}
     <div class="section-head"><h1>${esc(c.title)}</h1><p class="lede">${esc(c.intro)}</p></div>
     ${tier("emergency", c.emergency)}${tier("urgent", c.urgent)}${tier("normal", c.normal)}
+    ${sourcesSection(T().sources?.help)}
     <p class="quiet">${esc(s.footerNote)}</p></div>`;
   return { title: `${s.getHelp} — ${s.practiceName}`, html };
+}
+
+/** Every source, grouped, as in the app's Sources screen. The app's note on
+ *  how it uses a surgery date is left out: the website has no date. */
+function viewSources() {
+  const src = T().sources, s = site();
+  if (!src) return null;
+  // The app's intro ends "Links open in your web browser." — true here too.
+  const html = `<div class="stack">
+    ${appBanner()}
+    <div class="section-head"><h1>${esc(src.title)}</h1><p class="lede">${esc(src.intro)}</p></div>
+    ${src.groups.map((g) => `<section class="sources"><p class="eyebrow">${esc(g.title)}</p>${sourceList(g.ids)}</section>`).join("")}
+    <p class="quiet">${esc(s.footerNote)}</p></div>`;
+  return { title: `${src.title} — ${s.practiceName}`, html };
 }
 
 // ---------------------------------------------------------------- chrome
@@ -263,7 +341,7 @@ function renderChrome(route) {
       <button class="em" data-action="emergency">${ICON.cross}<span>${esc(s.emergencyAction)}</span></button>
     </div></div>`;
   document.getElementById("foot").innerHTML = `<span>${esc(s.reviewedNote)}</span>
-    <a href="${W().privacyHref}">${esc(W().privacy)}</a><a href="${W().supportHref}">${esc(W().support)}</a>`;
+    ${T().sources ? `<a href="#/sources">${esc(T().sources.title)}</a>` : ""}<a href="${W().privacyHref}">${esc(W().privacy)}</a><a href="${W().supportHref}">${esc(W().support)}</a>`;
   measureHeader();
 }
 
@@ -279,7 +357,7 @@ function measureHeader() {
 function parseRoute() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   if (parts[0] === "op" && parts[1]) return { tab: "guide", op: parts[1], chapter: parts[2] };
-  if (["prepare", "help"].includes(parts[0])) return { tab: parts[0] };
+  if (["prepare", "help", "sources"].includes(parts[0])) return { tab: parts[0] };
   return { tab: "guide" };
 }
 
@@ -291,6 +369,7 @@ function render({ keepScroll = false, focusChapter = null } = {}) {
   const view = route.op ? viewOperation(route.op)
     : route.tab === "prepare" ? viewPrepare()
     : route.tab === "help" ? viewHelp()
+    : route.tab === "sources" ? viewSources()
     : viewHome();
   if (!view) { location.replace("#/"); return; }
   renderChrome(route);
@@ -376,7 +455,7 @@ function disclaimerDialog() {
 function importantDialog() {
   const s = site();
   noticeDialog(s.importantTitle, `${paras(s.disclaimerBody)}<p>${esc(s.footerNote)}</p><p class="small mute">${esc(s.reviewedNote)}</p>
-    <p class="small"><a href="${W().privacyHref}">${esc(W().privacy)}</a> · <a href="${W().supportHref}">${esc(W().support)}</a></p>`);
+    <p class="small">${T().sources ? `<a href="#/sources" data-action="close">${esc(T().sources.allLink)}</a> · ` : ""}<a href="${W().privacyHref}">${esc(W().privacy)}</a> · <a href="${W().supportHref}">${esc(W().support)}</a></p>`);
 }
 
 // ---------------------------------------------------------------- events
@@ -410,7 +489,7 @@ document.addEventListener("click", (e) => {
 // ---------------------------------------------------------------- boot
 async function boot() {
   try {
-    const res = await fetch("content.json?v=db0a874418", { cache: "no-cache" });
+    const res = await fetch("content.json?v=e8f52868a2", { cache: "no-cache" });
     content = await res.json();
     if (!content.en || !content.fr) throw new Error("content");
   } catch {
